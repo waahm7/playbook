@@ -1,0 +1,33 @@
+---
+- name: Setup Development Environment
+  hosts: localhost
+  vars:
+    os: "{{ ansible_os_family | lower }}"
+    config_path: "~/configurations"
+    source_key: "./ssh/id_ed25519_vault"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519
+  tasks:
+    - include: tasks/ssh.yml
+#    - name: Include OS specific tasks
+#      ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
+#      tags: os_specific
+#
+#    - name: Configure global gitignore
+#      git_config:
+#        scope: global
+#        name: core.excludesfile
+#        value: "{{ config_path }}/dotfiles/gitignore_global"
+#      tags: git
+#
+#    - name: Link dotfiles
+#      ansible.builtin.include_tasks: link_dotfiles.yml
+#      tags: dotfiles
+#
+#    - name: Install git repositories
+#      ansible.builtin.include_tasks: install_git_repos.yml
+#      tags: git 
+#
+#    - name: Setup cron job
+#      ansible.builtin.include_tasks: cron.yml
+#      tags: cron
+#
