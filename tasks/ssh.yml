@@ -25,6 +25,12 @@
     - dotfiles
     - install
     - ssh
+- name: Add github.com to known hosts
+  shell: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+  tags:
+    - dotfiles
+    - install
+    - ssh
 
 #- name: Set authorized key took from file
 #  authorized_key:

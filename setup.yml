@@ -5,9 +5,14 @@
     os: "{{ ansible_os_family | lower }}"
     config_path: "~/configurations"
     source_key: "./ssh/id_ed25519_vault"
-    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
-    - include: tasks/ssh.yml
+    - name: Install SSH 
+      ansible.builtin.include_tasks: "tasks/ssh.yml"
+      tags:
+        - dotfiles
+        - install
+        - ssh
 #    - name: Include OS specific tasks
 #      ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
 #      tags: os_specific
