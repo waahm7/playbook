@@ -29,6 +29,10 @@
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 
         - amazon 
+    - name: Setup Fonts 
+      ansible.builtin.include_tasks: "tasks/fonts.yml"
+      tags: 
+        - fonts 
 #    - name: Setup cron job
 #      ansible.builtin.include_tasks: cron.yml
 #      tags: cron
