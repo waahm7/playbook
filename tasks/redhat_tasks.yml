@@ -1,13 +1,12 @@
 - name: Install required packages 
   yum:
     name:
-      - "@Development tools"
+      - "Development tools"
       - cmake
       - python3-devel
       - python3-pip
       - zsh
       - tmux
-      - cmake
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:
@@ -22,20 +21,20 @@
 - name: Clone Neovim repository
   git:
     repo: 'https://github.com/neovim/neovim.git'
-    dest: '/tmp/neovim'
+    dest: '~/tmp/neovim'
     update: yes
   tags:
     - nvim
 - name: Build Neovim from source
   command: make CMAKE_BUILD_TYPE=Release -j
   args:
-    chdir: /tmp/neovim
+    chdir: ~/tmp/neovim
   tags:
     - nvim
 - name: Install Neovim
   command: make install
   args:
-    chdir: /tmp/neovim
+    chdir: ~/tmp/neovim
     creates: /usr/local/bin/nvim
   tags:
     - nvim
