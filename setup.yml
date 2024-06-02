@@ -4,7 +4,7 @@
   vars:
     os: "{{ ansible_os_family | lower }}"
     config_path: "~/configurations"
-    source_key: "./ssh/id_ed25519_vault"
+    src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
     - name: Install SSH 
