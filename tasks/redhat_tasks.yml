@@ -85,6 +85,7 @@
     - ripgrep
 - name: Build ripgrep from source
   shell: |
+    source $HOME/.cargo/env
     cd {{ lookup('env', 'HOME') }}/ripgrep && cargo build --release
   args:
     creates: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
