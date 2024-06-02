@@ -31,3 +31,13 @@
     name: neovim
     state: latest
   tags: nvim
+- name: Install fzf 
+  shell: |
+    git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
+    {{ lookup('env', 'HOME') }}/.fzf/install --all
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/.fzf"
+  tags:
+    - fzf
+    - packages
+
