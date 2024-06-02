@@ -52,4 +52,34 @@
   tags:
     - fzf
     - packages
-
+- name: Check if ripgrep is already installed
+  command: rg --version
+  register: rg_version
+  ignore_errors: yes
+  changed_when: false
+  tags:
+    - ripgrep
+- name: Clone ripgrep repository
+  git:
+    repo: 'https://github.com/BurntSushi/ripgrep.git'
+    dest: "{{ lookup('env', 'HOME') }}/ripgrep"
+    update: no
+  when: rg_version.rc != 0
+  tags:
+    - ripgrep
+- name: Build ripgrep from source
+  shell: |
+    cd {{ lookup('env', 'HOME') }}/ripgrep && cargo build --release
+  args:
+    creates: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
+  when: rg_version.rc != 0
+  tags:
+    - ripgrep
+- name: Copy ripgrep binary to /usr/local/bin
+  copy:
+    src: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
+    dest: /usr/local/bin/rg
+    mode: '0755'
+  when: rg_version.rc != 0
+  tags:
+    - ripgrep
