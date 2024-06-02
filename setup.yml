@@ -25,6 +25,10 @@
       ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
       tags: 
         - dotfiles
+    - name: Setup Amazon Work 
+      ansible.builtin.include_tasks: "tasks/amazon.yml"
+      tags: 
+        - amazon 
 #    - name: Setup cron job
 #      ansible.builtin.include_tasks: cron.yml
 #      tags: cron
