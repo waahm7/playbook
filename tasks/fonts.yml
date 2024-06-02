@@ -1,6 +1,6 @@
 - name: Set font directory variable based on OS
   set_fact:
-    font_dir: "{{ (ansible_os_family == 'Darwin') | ternary('/Library/Fonts/powerlevel10k', '/usr/local/share/fonts/powerlevel10k') }}"
+    font_dir: "{{ (ansible_os_family == 'Darwin') | ternary('/Library/Fonts/powerlevel10k', '/usr/local/share/fonts/') }}"
   tags:
     - fonts
 - name: Ensure font directory exists
