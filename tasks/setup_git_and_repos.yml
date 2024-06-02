@@ -35,7 +35,7 @@
 - name: Check if Oh-My-Zsh is installed
   stat:
     path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
-    register: oh_my_stats
+  register: oh_my_stats
 
 - name: Install Oh-My-Zsh
   shell: |
