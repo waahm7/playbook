@@ -14,10 +14,12 @@
     state: present
   become: yes
 - name: Change shell to zsh
-  shell: chsh -s $(which zsh)
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /bin/zsh
   tags:
-    - install
     - zsh
+  become: yes
 - name: Check if neovim is already installed
   command: nvim --version
   register: nvim_version 
