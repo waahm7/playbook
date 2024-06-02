@@ -1,0 +1,22 @@
+- name: Ensure work directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/work"
+    state: directory
+  tags:
+    - amazon 
+
+- name: Check if aws-c-crt directory exists
+  stat:
+    path: "{{ ansible_env.HOME }}/work/aws-c-crt"
+  register: aws_c_crt_dir
+
+- name: Clone aws-c-crt repository if directory does not exist
+  git:
+    repo: 'git@github.com:waahm7/aws-c-crt.git'
+    dest: "{{ ansible_env.HOME }}/work/aws-c-crt"
+    clone: yes
+    update: no
+    when: not aws_c_crt_dir.stat.exists
+    tags:
+      - aws-c-crt
+
