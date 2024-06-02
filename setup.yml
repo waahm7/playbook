@@ -22,7 +22,7 @@
         git 
         dotfiles
     - name: Link dotfiles
-      ansible.builtin.include_tasks: tasks/link_dotfiles.yml
+      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
       tags: 
         - dotfiles
 #    - name: Setup cron job
