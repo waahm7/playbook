@@ -3,13 +3,15 @@
   tags:
     - install
     - zsh
-
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:
     - install
     - zsh
-
+- name: Ensure gnupg is installed #adding neovim ppa requires it
+  apt:
+    name: gnupg
+    state: present
 - name: Add the Neovim PPA
   apt_repository:
     repo: ppa:neovim-ppa/stable
