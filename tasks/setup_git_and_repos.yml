@@ -1,4 +1,36 @@
 ---
+- name: Configure global gitignore
+  git_config:
+    scope: global
+    name: core.excludesfile
+    value: "{{ config_path }}/dotfiles/gitignore_global"
+  tags: 
+    - git
+- name: Git personal setup email
+  git_config:
+    name: user.email
+    scope: global
+    value: "waahm7@gmail.com"
+  tags:
+  - git
+- name: Git personal setup name
+  git_config:
+    name: user.name
+    scope: global
+    value: "Waqar Ahmed Khan"
+  tags:
+  - git
+
+# Clone the required repos, zsh plugins, packer, and tpm
+- name: Clone configuration 
+  git:
+    repo: git@github.com:waahm7/configurations.git 
+    dest: "{{ ansible_env.HOME }}/configurations"
+  tags: 
+    - git
+    - dotfiles
+    - install
+
 - name: Clone zsh-syntax-highlighting
   git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
@@ -6,6 +38,7 @@
   tags: 
     - zsh
     - git
+    - install
 
 - name: Clone zsh-autosuggestions
   git:
@@ -14,6 +47,7 @@
   tags: 
     - zsh
     - git
+    - install
 
 - name: Clone zsh-autocomplete
   git:
@@ -23,6 +57,7 @@
   tags: 
     - zsh
     - git
+    - install
 
 - name: Clone powerlevel10k
   git:
@@ -32,6 +67,7 @@
   tags: 
     - zsh
     - git
+    - install
 
 - name: Clone ohmyzsh-full-autoupdate
   git:
@@ -40,6 +76,7 @@
   tags: 
     - zsh
     - git
+    - install
 
 - name: Install Neovim Packer
   git:
@@ -49,6 +86,7 @@
   tags: 
     - neovim
     - git
+    - install
 
 - name: Install Tmux Plugin Manager
   git:
@@ -57,3 +95,4 @@
   tags: 
     - tmux
     - git
+    - install

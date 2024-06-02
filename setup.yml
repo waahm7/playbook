@@ -13,25 +13,18 @@
         - dotfiles
         - install
         - ssh
-#    - name: Include OS specific tasks
-#      ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
-#      tags: os_specific
-#
-#    - name: Configure global gitignore
-#      git_config:
-#        scope: global
-#        name: core.excludesfile
-#        value: "{{ config_path }}/dotfiles/gitignore_global"
-#      tags: git
-#
+    - name: Install git repositories
+      ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
+      tags: 
+        git 
+        install
+        dotfiles
 #    - name: Link dotfiles
 #      ansible.builtin.include_tasks: link_dotfiles.yml
 #      tags: dotfiles
-#
-#    - name: Install git repositories
-#      ansible.builtin.include_tasks: install_git_repos.yml
-#      tags: git 
-#
+#    - name: Include OS specific tasks
+#      ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
+#      tags: os_specific
 #    - name: Setup cron job
 #      ansible.builtin.include_tasks: cron.yml
 #      tags: cron
