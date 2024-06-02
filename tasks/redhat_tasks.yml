@@ -46,7 +46,7 @@
   tags:
     - nvim
 - name: Install Neovim
-  command: make install
+  command: sudo make install
   args:
     chdir: /tmp/neovim
     creates: /usr/local/bin/nvim
@@ -100,5 +100,6 @@
     dest: /usr/local/bin/rg
     mode: '0755'
   when: rg_version.rc != 0
+  become: yes
   tags:
     - ripgrep
