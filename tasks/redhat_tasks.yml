@@ -1,7 +1,7 @@
 - name: Install required packages 
   yum:
     name:
-      - Development tools
+      - "@Development tools"
       - cmake
       - python3-devel
       - python3-pip
