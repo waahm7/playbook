@@ -16,6 +16,13 @@
   tags:
     - install
     - zsh
+- name: Check if neovim is already installed
+  command: nvim --version
+  register: nvim_version 
+  ignore_errors: yes
+  changed_when: false
+  tags:
+    - nvim 
 - name: Upgrade pip and install Neovim package for Python
   pip:
     name: neovim
@@ -26,13 +33,15 @@
   git:
     repo: 'https://github.com/neovim/neovim.git'
     dest: '/tmp/neovim'
-    update: yes
+    update: no 
+  when: nvim_version.rc != 0
   tags:
     - nvim
 - name: Build Neovim from source
   command: make CMAKE_BUILD_TYPE=Release -j
   args:
     chdir: /tmp/neovim
+  when: nvim_version.rc != 0
   tags:
     - nvim
 - name: Install Neovim
@@ -40,15 +49,23 @@
   args:
     chdir: /tmp/neovim
     creates: /usr/local/bin/nvim
+  when: nvim_version.rc != 0
   tags:
     - nvim
-
+- name: Check if fzf is already installed
+  command: fzf --version
+  register: fzf_version 
+  ignore_errors: yes
+  changed_when: false
+  tags:
+    - nvim 
 - name: Install fzf 
   shell: |
     git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
     {{ lookup('env', 'HOME') }}/.fzf/install --all
   args:
     creates: "{{ lookup('env', 'HOME') }}/.fzf"
+  when: fzf_version.rc !=0
   tags:
     - fzf
     - packages

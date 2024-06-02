@@ -7,11 +7,16 @@
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
-    - name: Install SSH 
+    - name: install ssh 
       ansible.builtin.include_tasks: "tasks/ssh.yml"
       tags:
         - dotfiles
         - ssh
+    - name: install rust 
+      ansible.builtin.include_tasks: "tasks/rust.yml"
+      tags:
+        - rust 
+        - packages
     - name: Include OS specific tasks
       ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
