@@ -10,6 +10,8 @@
       - npm
       - gcc
       - g++
+    state: present
+  become: yes
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:
