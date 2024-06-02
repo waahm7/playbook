@@ -4,6 +4,12 @@
     state: directory
   tags:
     - amazon 
+- name: Ensure .aws directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.aws"
+    state: directory
+  tags:
+    - amazon 
 - name: Check if aws-c-crt directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-c-crt"
