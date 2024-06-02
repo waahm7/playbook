@@ -20,20 +20,20 @@
 - name: Clone Neovim repository
   git:
     repo: 'https://github.com/neovim/neovim.git'
-    dest: '~/neovim'
+    dest: '/tmp/neovim'
     update: yes
   tags:
     - nvim
 - name: Build Neovim from source
   command: make CMAKE_BUILD_TYPE=Release -j
   args:
-    chdir: ~/neovim
+    chdir: /tmp/neovim
   tags:
     - nvim
 - name: Install Neovim
   command: make install
   args:
-    chdir: ~/neovim
+    chdir: /tmp/neovim
     creates: /usr/local/bin/nvim
   tags:
     - nvim
