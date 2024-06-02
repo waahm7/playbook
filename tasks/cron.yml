@@ -1,0 +1,8 @@
+---
+- name: Setup cron job for syncing configurations
+  cron:
+    name: "Sync Configurations"
+    minute: "*/30"
+    job: "{{ config_path }}/scripts/sync_configurations.sh > {{ config_path }}/scripts/cron.log 2>&1"
+  tags: cron
+

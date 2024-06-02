@@ -1,0 +1,64 @@
+---
+- name: Install Xcode Command Line Tools
+  command: xcode-select --install
+  ignore_errors: yes  # Ignore errors if already installed
+  tags: xcode
+
+- name: Install Homebrew
+  shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  args:
+    creates: /opt/homebrew/bin/brew  # Adjust the path as per your system
+  tags: homebrew
+
+- name: Install Homebrew packages
+  homebrew_cask:
+    name: "{{ item }}"
+  loop:
+    - iterm2
+    - todoist
+    - alfred
+    - google-chrome
+    - nvalt
+    - fantastical
+    - font-fira-code
+    - font-hack-nerd-font
+    - visual-studio-code
+    - vlc
+    - zwift
+    - karabiner-elements
+    - selfcontrol
+  tags: homebrew_cask
+
+- name: Install additional Homebrew packages
+  homebrew:
+    name: "{{ item }}"
+  loop:
+    - openjdk@17
+    - zsh
+    - zsh-syntax-highlighting
+    - exa
+    - mas
+    - ripgrep
+    - neovim
+    - fd
+    - npm
+    - rust
+    - fzf
+    - llvm
+    - tmux
+    - ansible
+  tags: homebrew
+
+- name: Install Mac App Store applications
+  shell: mas install "{{ item }}"
+  loop:
+    - 441258766  # Magnet
+    - 302584613  # Kindle
+    - 1402042596 # Adblock
+    - 425424353  # The Unarchiver
+  tags: mas
+
+- name: Setup SelfControl to allow one month block
+  command: defaults write org.eyebeam.SelfControl MaxBlockLength -int 43200
+  tags: selfcontrol
+

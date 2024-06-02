@@ -1,0 +1,59 @@
+---
+- name: Clone zsh-syntax-highlighting
+  git:
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+  tags: 
+    - zsh
+    - git
+
+- name: Clone zsh-autosuggestions
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+  tags: 
+    - zsh
+    - git
+
+- name: Clone zsh-autocomplete
+  git:
+    repo: https://github.com/marlonrichert/zsh-autocomplete.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
+    depth: 1
+  tags: 
+    - zsh
+    - git
+
+- name: Clone powerlevel10k
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/themes/powerlevel10k"
+    depth: 1
+  tags: 
+    - zsh
+    - git
+
+- name: Clone ohmyzsh-full-autoupdate
+  git:
+    repo: https://github.com/Pilaton/OhMyZsh-full-autoupdate.git
+    dest: "{{ ansible_env.HOME }}/.oh-my-zsh/custom/plugins/ohmyzsh-full-autoupdate"
+  tags: 
+    - zsh
+    - git
+
+- name: Install Neovim Packer
+  git:
+    repo: https://github.com/wbthomason/packer.nvim
+    dest: ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+    depth: 1
+  tags: 
+    - neovim
+    - git
+
+- name: Install Tmux Plugin Manager
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+  tags: 
+    - tmux
+    - git

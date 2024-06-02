@@ -1,0 +1,38 @@
+---
+- name: Link .zshrc
+  file:
+    src: "{{ config_path }}/dotfiles/zshrc"
+    dest: ~/.zshrc
+    state: dotfiles
+
+- name: Link VSCode settings.json
+  file:
+    src: "{{ config_path }}/dotfiles/vscode/settings.json"
+    dest: "~/Library/Application Support/Code/User/settings.json"
+    state: dotfiles
+
+- name: Link VSCode keybindings.json
+  file:
+    src: "{{ config_path }}/dotfiles/vscode/keybindings.json"
+    dest: "~/Library/Application Support/Code/User/keybindings.json"
+    state: dotfiles
+
+- name: Link Neovim configuration
+  file:
+    src: "{{ config_path }}/nvim"
+    dest: ~/.config/nvim
+    state: dotfiles
+
+- name: Link tmux.conf
+  file:
+    src: "{{ config_path }}/dotfiles/tmux.conf"
+    dest: ~/.tmux.conf
+    state: dotfiles
+
+- name: Link p10k.zsh
+  file:
+    src: "{{ config_path }}/dotfiles/p10k.zsh"
+    dest: ~/.p10k.zsh
+    state: dotfiles 
+
+
