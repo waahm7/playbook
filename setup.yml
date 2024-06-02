@@ -14,7 +14,7 @@
         - install
         - ssh
     - name: Include OS specific tasks
-      ansible.builtin.include_tasks: "{{ os }}_tasks.yml"
+      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
         - os_specific
         - install
