@@ -7,11 +7,7 @@
       - python3-pip
       - zsh
       - tmux
-  state: present
-  tags:
-    - nvim
-    - zsh
-    - pacakges
+      - cmake
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:
