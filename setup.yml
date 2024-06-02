@@ -13,7 +13,7 @@
         - dotfiles
         - ssh
     - name: install rust 
-      ansible.builtin.include_tasks: "tasks/rust.yml"
+      ansible.builtin.include_tasks: "tasks/install_rust.yml"
       tags:
         - rust 
         - packages
