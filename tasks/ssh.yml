@@ -26,7 +26,9 @@
     - install
     - ssh
 - name: Add github.com to known hosts
-  shell: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+  path: "{{ lookup('env', 'HOME') }}/.ssh/known_hosts"
+  line: "{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+  create: yes
   tags:
     - dotfiles
     - install
