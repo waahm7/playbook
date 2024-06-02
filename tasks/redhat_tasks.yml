@@ -6,6 +6,10 @@
       - python3-pip
       - zsh
       - tmux
+      - cargo
+      - npm
+      - gcc
+      - g++
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:

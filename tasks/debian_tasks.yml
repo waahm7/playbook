@@ -1,16 +1,22 @@
-- name: Install ZSH
-  apt: name=zsh
+- name: Install Apt Packages 
+  apt: 
+    name: 
+      - zsh
+      - gnupg #adding neovim ppa requires it
+      - tmux
+      - cmake
+      - cargo
+      - npm
+      - gcc
+      - g++
   tags:
+    - package 
     - zsh
+    - nvim
 - name: Change shell to zsh
   shell: chsh -s $(which zsh)
   tags:
     - zsh
-- name: Ensure gnupg is installed #adding neovim ppa requires it
-  apt:
-    name: gnupg
-    state: present
-  tags: nvim
 - name: Add the Neovim PPA
   apt_repository:
     repo: ppa:neovim-ppa/unstable
@@ -25,8 +31,3 @@
     name: neovim
     state: latest
   tags: nvim
-- name: Install tmux
-  apt:
-    name: tmux
-    state: latest
-
