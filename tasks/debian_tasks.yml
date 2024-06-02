@@ -16,12 +16,9 @@
     - zsh
     - nvim
 - name: Change shell to zsh
-  user:
-    name: "{{ ansible_env.USER }}"
-    shell: /bin/zsh
+  shell: chsh -s $(which zsh)
   tags:
     - zsh
-  become: yes
 - name: Add the Neovim PPA
   apt_repository:
     repo: ppa:neovim-ppa/unstable

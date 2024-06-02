@@ -10,6 +10,7 @@
       - npm
       - gcc
       - g++
+      - util-linux-user #chsh requires it
     state: present
   become: yes
 - name: Change shell to zsh
