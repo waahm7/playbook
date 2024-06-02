@@ -16,22 +16,15 @@
   apt_repository:
     repo: ppa:neovim-ppa/stable
     state: present
-  become: yes
-
 - name: Update apt cache
   apt:
     update_cache: yes
-    become: yes
-
 - name: Install Neovim
   apt:
     name: neovim
     state: latest
-    become: yes
-
 - name: Install tmux
   apt:
     name: tmux
     state: latest
-    become: yes
 
