@@ -11,22 +11,20 @@
       ansible.builtin.include_tasks: "tasks/ssh.yml"
       tags:
         - dotfiles
-        - install
         - ssh
     - name: Include OS specific tasks
       ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
         - os_specific
-        - install
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
         git 
-        install
         dotfiles
-#    - name: Link dotfiles
-#      ansible.builtin.include_tasks: link_dotfiles.yml
-#      tags: dotfiles
+    - name: Link dotfiles
+      ansible.builtin.include_tasks: tasks/link_dotfiles.yml
+      tags: 
+        - dotfiles
 #    - name: Setup cron job
 #      ansible.builtin.include_tasks: cron.yml
 #      tags: cron
