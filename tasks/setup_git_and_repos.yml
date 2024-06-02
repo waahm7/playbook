@@ -31,6 +31,22 @@
     - dotfiles
     - install
 
+#omz config
+- name: Check if Oh-My-Zsh is installed
+  stat:
+    path: "{{ ansible_env,HOME }}/.oh-my-zsh"
+    register: oh_my_stats
+
+- name: Install Oh-My-Zsh
+  shell: |
+    curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer &&
+    chmod +x ~/.oh-my-installer &&
+    ~/.oh-my-installer
+  tags: 
+    - zsh
+    - install
+  when: oh_my_stats.stat.exists == False
+
 - name: Clone zsh-syntax-highlighting
   git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
