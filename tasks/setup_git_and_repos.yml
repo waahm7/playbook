@@ -12,14 +12,14 @@
     scope: global
     value: "waahm7@gmail.com"
   tags:
-  - git
+    - git
 - name: Git personal setup name
   git_config:
     name: user.name
     scope: global
     value: "Waqar Ahmed Khan"
   tags:
-  - git
+    - git
 
 # Clone the required repos, zsh plugins, packer, and tpm
 - name: Clone configuration 
