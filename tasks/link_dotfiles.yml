@@ -1,4 +1,8 @@
 ---
+- name: Ensure .config/neovim directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.config/neovim"
+    state: directory
 - name: Link .zshrc
   shell: "rm {{ lookup('env', 'HOME') }}/.zshrc && ln -s {{ config_path }}/dotfiles/zshrc {{ lookup('env', 'HOME') }}/.zshrc"
   ignore_errors: true
