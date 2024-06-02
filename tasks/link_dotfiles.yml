@@ -4,15 +4,15 @@
     dest: "{{ lookup('env', 'HOME') }}/.config/neovim"
     state: directory
 - name: Link .zshrc
-  shell: "rm {{ lookup('env', 'HOME') }}/.zshrc && ln -s {{ config_path }}/dotfiles/zshrc {{ lookup('env', 'HOME') }}/.zshrc"
+  shell: "rm {{ lookup('env', 'HOME') }}/.zshrc;ln -s {{ config_path }}/dotfiles/zshrc {{ lookup('env', 'HOME') }}/.zshrc"
   ignore_errors: true
 - name: Link Neovim configuration
   shell: "ln -s {{ config_path }}/nvim {{ lookup('env', 'HOME') }}/.config/nvim"
   ignore_errors: true
 - name: Link tmux.conf
-  shell: "ln -s {{ config_path }}/dotfiles/tmux.conf {{ lookup('env', 'HOME') }}/.tmux.conf"
+  shell: "rm {{ lookup('env', 'HOME') }}/.tmux.conf;ln -s {{ config_path }}/dotfiles/tmux.conf {{ lookup('env', 'HOME') }}/.tmux.conf"
   ignore_errors: true
 - name: Link p10k.zsh
-  shell: "ln -s {{ config_path }}/dotfiles/p10k.zsh {{ lookup('env', 'HOME') }}/.p10k.zsh"
+  shell: "rm {{ lookup('env', 'HOME') }}/.p10k.zsh;ln -s {{ config_path }}/dotfiles/p10k.zsh {{ lookup('env', 'HOME') }}/.p10k.zsh"
   ignore_errors: true
 
