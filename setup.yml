@@ -3,7 +3,7 @@
   hosts: localhost
   vars:
     os: "{{ ansible_os_family | lower }}"
-    config_path: "~/configurations"
+    config_path: "{{ lookup('env', 'HOME') }}/configurations"
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
