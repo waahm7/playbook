@@ -20,7 +20,7 @@
     shell: /bin/zsh
   become: yes
 - name: Setup Neovim from Source 
-  ansible.builtin.include_tasks: "setup_neovim_from_source.yml"
+  ansible.builtin.include_tasks: "setup_nvim_from_source.yml"
 - name: Setup fzf from Source 
   ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
 - name: Setup Ripgrep from Source 
