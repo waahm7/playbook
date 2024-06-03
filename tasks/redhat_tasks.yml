@@ -20,14 +20,7 @@
   become: yes
 - name: Setup Neovim from Source 
   ansible.builtin.include_tasks: "setup_neovim_from_source.yml"
-- name: Install fzf 
-  shell: |
-    git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
-    {{ lookup('env', 'HOME') }}/.fzf/install --all
-  args:
-    creates: "{{ lookup('env', 'HOME') }}/.fzf"
-  when: fzf_version.rc !=0
-  tags:
-    - fzf
+- name: Setup fzf from Source 
+  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
 - name: Setup Ripgrep from Source 
   ansible.builtin.include_tasks: "setup_ripgrep_from_source.yml"

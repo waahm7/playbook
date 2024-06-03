@@ -5,40 +5,26 @@
       - gnupg #adding neovim ppa requires it
       - tmux
       - cmake
-      - cargo
       - npm
       - gcc
       - g++
       - ripgrep
       - make
-  tags:
-    - package 
-    - zsh
-    - nvim
 - name: Change shell to zsh
-  shell: chsh -s $(which zsh)
-  tags:
-    - zsh
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /bin/zsh
+  become: yes
 - name: Add the Neovim PPA
   apt_repository:
     repo: ppa:neovim-ppa/unstable
     state: present
-  tags: nvim
 - name: Update apt cache
   apt:
     update_cache: yes
-  tags: nvim
 - name: Install Neovim
   apt:
     name: neovim
     state: latest
-  tags: nvim
-- name: Install fzf 
-  shell: |
-    git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
-    {{ lookup('env', 'HOME') }}/.fzf/install --all
-  args:
-    creates: "{{ lookup('env', 'HOME') }}/.fzf"
-  tags:
-    - fzf
-    - packages
+- name: Setup fzf from Source 
+  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"

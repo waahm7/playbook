@@ -1,4 +1,5 @@
 ---
+# TODO: from chatgpt for now. Need to refactor and validate it.
 - name: Install Xcode Command Line Tools
   command: xcode-select --install
   ignore_errors: yes  # Ignore errors if already installed
