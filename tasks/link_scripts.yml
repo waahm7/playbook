@@ -35,3 +35,17 @@
   become: yes
   tags:
     - scripts
+- name: Make ec2 script executable
+  file:
+    path: "{{ config_path }}/usr/local/bin/ec2"
+    mode: '0755'
+  tags:
+    - scripts
+- name: Symlink ec2 to /usr/local/bin
+  file:
+    src: "{{ config_path }}/usr/local/bin/ec2"
+    dest: "/usr/local/bin/ec2"
+    state: link
+  become: yes
+  tags:
+    - scripts

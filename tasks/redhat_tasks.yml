@@ -10,6 +10,7 @@
       - npm
       - gcc
       - g++
+      - gdb
       - util-linux-user #chsh requires it
     state: present
   become: yes
