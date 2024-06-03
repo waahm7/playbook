@@ -17,53 +17,9 @@
   user:
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
-  tags:
-    - zsh
   become: yes
-- name: Check if neovim is already installed
-  command: nvim --version
-  register: nvim_version 
-  ignore_errors: yes
-  changed_when: false
-  tags:
-    - nvim 
-- name: Upgrade pip and install Neovim package for Python
-  pip:
-    name: neovim
-    state: latest
-  tags:
-    - nvim
-- name: Clone Neovim repository
-  git:
-    repo: 'https://github.com/neovim/neovim.git'
-    dest: '/tmp/neovim'
-    update: no 
-  when: nvim_version.rc != 0
-  tags:
-    - nvim
-- name: Build Neovim from source
-  command: make CMAKE_BUILD_TYPE=Release -j
-  args:
-    chdir: /tmp/neovim
-  when: nvim_version.rc != 0
-  tags:
-    - nvim
-- name: Install Neovim
-  command: make install
-  args:
-    chdir: /tmp/neovim
-    creates: /usr/local/bin/nvim
-  when: nvim_version.rc != 0
-  become: yes
-  tags:
-    - nvim
-- name: Check if fzf is already installed
-  command: fzf --version
-  register: fzf_version 
-  ignore_errors: yes
-  changed_when: false
-  tags:
-    - nvim 
+- name: Setup Neovim from Source 
+  ansible.builtin.include_tasks: "setup_neovim_from_source.yml"
 - name: Install fzf 
   shell: |
     git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
@@ -73,37 +29,5 @@
   when: fzf_version.rc !=0
   tags:
     - fzf
-    - packages
-- name: Check if ripgrep is already installed
-  command: rg --version
-  register: rg_version
-  ignore_errors: yes
-  changed_when: false
-  tags:
-    - ripgrep
-- name: Clone ripgrep repository
-  git:
-    repo: 'https://github.com/BurntSushi/ripgrep.git'
-    dest: "{{ lookup('env', 'HOME') }}/ripgrep"
-    update: no
-  when: rg_version.rc != 0
-  tags:
-    - ripgrep
-- name: Build ripgrep from source
-  shell: |
-    source $HOME/.cargo/env
-    cd {{ lookup('env', 'HOME') }}/ripgrep && cargo build --release
-  args:
-    creates: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
-  when: rg_version.rc != 0
-  tags:
-    - ripgrep
-- name: Copy ripgrep binary to /usr/local/bin
-  copy:
-    src: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
-    dest: /usr/local/bin/rg
-    mode: '0755'
-  when: rg_version.rc != 0
-  become: yes
-  tags:
-    - ripgrep
+- name: Setup Ripgrep from Source 
+  ansible.builtin.include_tasks: "setup_ripgrep_from_source.yml"

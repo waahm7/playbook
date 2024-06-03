@@ -12,20 +12,21 @@
       tags:
         - dotfiles
         - ssh
-    - name: install rust 
-      ansible.builtin.include_tasks: "tasks/install_rust.yml"
+        - git
+    - name: setup rust 
+      ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
         - rust 
         - packages
     - name: Include OS specific tasks
       ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
-        - os_specific
+        - os
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
-        git 
-        dotfiles
+        - git 
+        - dotfiles
     - name: Link dotfiles
       ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
       tags: 

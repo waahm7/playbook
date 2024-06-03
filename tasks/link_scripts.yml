@@ -5,36 +5,23 @@
     state: directory
     mode: '0755'
   become: yes
-
 - name: Make tmux-sessionizer script executable
   file:
     path: "{{ config_path }}/usr/local/bin/tmux-sessionizer"
     mode: '0755'
-  tags:
-    - scripts
-
 - name: Symlink tmux-sessionizer to /usr/local/bin
   file:
     src: "{{ config_path }}/usr/local/bin/tmux-sessionizer"
     dest: "/usr/local/bin/tmux-sessionizer"
     state: link
   become: yes
-  tags:
-    - scripts
-
 - name: Make syncgr script executable
   file:
     path: "{{ config_path }}/usr/local/bin/syncgr"
     mode: '0755'
-  tags:
-    - scripts
-
 - name: Symlink syncgr to /usr/local/bin
   file:
     src: "{{ config_path }}/usr/local/bin/syncgr"
     dest: "/usr/local/bin/syncgr"
     state: link
   become: yes
-  tags:
-    - scripts
-
