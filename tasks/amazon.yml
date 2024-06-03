@@ -2,14 +2,20 @@
   file:
     dest: "{{ lookup('env', 'HOME') }}/work"
     state: directory
+  tags:
+    - amazon
 - name: Ensure .aws directory exists
   file:
     dest: "{{ lookup('env', 'HOME') }}/.aws"
     state: directory
+  tags:
+    - amazon
 - name: Check if aws-c-crt directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-c-crt"
   register: aws_c_crt_dir
+  tags:
+    - amazon
 - name: Clone aws-c-crt repository 
   git:
     repo: 'git@github.com:waahm7/aws-c-crt.git'
@@ -17,10 +23,14 @@
     clone: yes
     update: no
   when: not aws_c_crt_dir.stat.exists
+  tags:
+    - amazon
 - name: Check if aws-crt-s3-benchmarks directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-crt-s3-benchmarks"
   register: aws_crt_s3_benchmarks_dir
+  tags:
+    - amazon
 - name: Clone aws-crt-s3-benchmarks repository 
   git:
     repo: 'git@github.com:awslabs/aws-crt-s3-benchmarks.git'
@@ -28,4 +38,6 @@
     clone: yes
     update: no
   when: not aws_crt_s3_benchmarks_dir.stat.exists
+  tags:
+    - amazon
 
