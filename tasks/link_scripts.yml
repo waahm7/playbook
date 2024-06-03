@@ -1,0 +1,29 @@
+---
+- name: Ensure /usr/local/bin is present and has correct permissions
+  file:
+    path: /usr/local/bin
+    state: directory
+    mode: '0755'
+  become: yes
+  tags:
+    - scripts
+
+- name: Make all scripts in {{ config_path }}/usr/local/bin executable
+  file:
+    path: "{{ item }}"
+    mode: '0755'
+  loop: "{{ lookup('fileglob', config_path + '/usr/local/bin/*') }}"
+  tags:
+    - scripts
+
+- name: Symlink scripts to /usr/local/bin
+  shell: |
+    for script in {{ config_path }}/usr/local/bin/*; do
+      ln -sf "$script" /usr/local/bin/$(basename "$script")
+    done
+  args:
+    executable: /bin/zsh
+  become: yes
+  tags:
+    - scripts
+

@@ -30,6 +30,10 @@
       ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
       tags: 
         - dotfiles
+    - name: Link Scripts
+      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
+      tags: 
+        - scripts 
     - name: Setup Amazon Work 
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 
