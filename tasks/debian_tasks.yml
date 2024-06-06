@@ -16,6 +16,9 @@
       - ripgrep
       - make
       - neovim
+      - python3-pip
+      - python3-venv
+      - python3-boto3
     state: present
     update_cache: yes
   become: yes
