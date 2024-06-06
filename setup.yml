@@ -6,61 +6,40 @@
     config_path: "{{ lookup('env', 'HOME') }}/configurations"
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
-
   tasks:
-    - name: Install SSH tools and setup configuration
-      block:
-        - import_tasks: "tasks/ssh.yml"
+    - name: install ssh 
+      ansible.builtin.include_tasks: "tasks/ssh.yml"
       tags:
         - dotfiles
         - ssh
         - git
-
-    - name: Setup Rust environment
-      block:
-        - import_tasks: "tasks/setup_rust.yml"
+    - name: setup rust 
+      ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
         - rust 
         - packages
-
     - name: Include OS specific tasks
-      block:
-        - import_tasks: "tasks/{{ os }}_tasks.yml"
-      tags:
+      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
+      tags: 
         - os
-
-    - name: Install and configure Git repositories
-      block:
-        - import_tasks: "tasks/setup_git_and_repos.yml"
-      tags:
+    - name: Install git repositories
+      ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
+      tags: 
         - git 
         - dotfiles
-
-    - name: Link configuration dotfiles
-      block:
-        - import_tasks: "tasks/link_dotfiles.yml"
-      tags:
+    - name: Link dotfiles
+      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
+      tags: 
         - dotfiles
-
-    - name: Link useful scripts
-      block:
-        - import_tasks: "tasks/link_scripts.yml"
-      tags:
-        - scripts
-
-    - name: Setup Amazon work environment
-      block:
-        - import_tasks: "tasks/amazon.yml"
-      tags:
-        - amazon
-
-    - name: Install and configure fonts
-      block:
-        - import_tasks: "tasks/fonts.yml"
-      tags:
-        - fonts
-
-#    - name: Setup cron job
-#      ansible.builtin.include_tasks: cron.yml
-#      tags: cron
-#
+    - name: Link Scripts
+      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
+      tags: 
+        - scripts 
+    - name: Setup Amazon Work 
+      ansible.builtin.include_tasks: "tasks/amazon.yml"
+      tags: 
+        - amazon 
+    - name: Setup Fonts 
+      ansible.builtin.include_tasks: "tasks/fonts.yml"
+      tags: 
+        - fonts 
