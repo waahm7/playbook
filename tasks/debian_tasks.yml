@@ -1,3 +1,8 @@
+- name: Add the Neovim PPA
+  apt_repository:
+    repo: ppa:neovim-ppa/unstable
+    state: present
+  become: yes
 - name: Install Apt Packages 
   apt: 
     name: 
@@ -10,6 +15,7 @@
       - g++
       - ripgrep
       - make
+      - neovim
     state: present
     update_cache: yes
   become: yes
@@ -18,16 +24,5 @@
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
   become: yes
-- name: Add the Neovim PPA
-  apt_repository:
-    repo: ppa:neovim-ppa/unstable
-    state: present
-- name: Update apt cache
-  apt:
-    update_cache: yes
-- name: Install Neovim
-  apt:
-    name: neovim
-    state: latest
 - name: Setup fzf from Source 
   ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
