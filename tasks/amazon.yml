@@ -56,11 +56,4 @@
   when: ansible_distribution == 'RedHat'
   tags:
     - amazon
-- name: Install boto3 with pip3
-  pip:
-    name: boto3
-    executable: pip3
-  become: yes
-  tags:
-    - amazon
 
