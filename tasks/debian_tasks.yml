@@ -10,6 +10,9 @@
       - g++
       - ripgrep
       - make
+    state: present
+    update_cache: yes
+  become: yes
 - name: Change shell to zsh
   user:
     name: "{{ ansible_env.USER }}"
