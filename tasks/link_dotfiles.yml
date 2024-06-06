@@ -1,11 +1,14 @@
 ---
+- name: Ensure ~/.config directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.config"
+    state: directory
 - name: Link Neovim configuration
   ansible.builtin.file:
     src: "{{ config_path }}/nvim"
     dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
     state: link
     force: yes
-
 - name: Link tmux.conf
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/tmux.conf"
