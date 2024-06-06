@@ -10,6 +10,16 @@
     state: directory
   tags:
     - amazon
+- name: Create ~/.aws/config file with specific content
+  ansible.builtin.copy:
+    dest: "{{ lookup('env', 'HOME') }}/.aws/config"
+    content: |
+      [profile default]
+      s3 =
+        preferred_transfer_client=crt
+        target_bandwidth=100Gb/s
+  tags:
+    - amazon
 - name: Check if aws-c-crt directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-c-crt"
@@ -38,6 +48,19 @@
     clone: yes
     update: no
   when: not aws_crt_s3_benchmarks_dir.stat.exists
+  tags:
+    - amazon
+- name: Install Al2023 tools 
+  shell: "{{ lookup('env', 'HOME') }}/work/aws-crt-s3-bechmarks/scripts/install-tools-AL2023.py"
+  become: yes
+  when: ansible_distribution == 'RedHat'
+  tags:
+    - amazon
+- name: Install boto3 with pip3
+  pip:
+    name: boto3
+    executable: pip3
+  become: yes
   tags:
     - amazon
 

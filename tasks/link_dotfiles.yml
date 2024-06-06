@@ -1,18 +1,29 @@
 ---
-- name: Ensure .config/neovim directory exists
-  file:
-    dest: "{{ lookup('env', 'HOME') }}/.config/neovim"
-    state: directory
 - name: Link Neovim configuration
-  shell: "ln -sf {{ config_path }}/nvim {{ lookup('env', 'HOME') }}/.config/nvim"
-  ignore_errors: true
+  ansible.builtin.file:
+    src: "{{ config_path }}/nvim"
+    dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
+    state: link
+    force: yes
+
 - name: Link tmux.conf
-  shell: "ln -sf {{ config_path }}/dotfiles/tmux.conf {{ lookup('env', 'HOME') }}/.tmux.conf"
-  ignore_errors: true
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/tmux.conf"
+    dest: "{{ lookup('env', 'HOME') }}/.tmux.conf"
+    state: link
+    force: yes
+
 - name: Link p10k.zsh
-  shell: "ln -sf {{ config_path }}/dotfiles/p10k.zsh {{ lookup('env', 'HOME') }}/.p10k.zsh"
-  ignore_errors: true
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/p10k.zsh"
+    dest: "{{ lookup('env', 'HOME') }}/.p10k.zsh"
+    state: link
+    force: yes
+
 - name: Link .zshrc
-  shell: "ln -sf {{ config_path }}/dotfiles/zshrc {{ lookup('env', 'HOME') }}/.zshrc && source {{ lookup('env', 'HOME') }}/.zshrc"
-  ignore_errors: true
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/zshrc"
+    dest: "{{ lookup('env', 'HOME') }}/.zshrc"
+    state: link
+    force: yes
 
