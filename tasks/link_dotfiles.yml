@@ -15,9 +15,6 @@
     dest: "{{ lookup('env', 'HOME') }}/.tmux.conf"
     state: link
     force: yes
-- name: Install tmux plugins
-  ansible.builtin.command: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm/bin/install_plugins"
-  become: yes
 - name: Link p10k.zsh
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/p10k.zsh"

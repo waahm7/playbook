@@ -6,7 +6,7 @@
 - name: Install Rust 
   shell: |
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source $HOME/.cargo/env
+    . $HOME/.cargo/env
   args:
     creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/rustc"
   when: rustc_version.rc != 0
