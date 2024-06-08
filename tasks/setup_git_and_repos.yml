@@ -14,7 +14,7 @@
     name: user.name
     scope: global
     value: "Waqar Ahmed Khan"
-# Clone the required repos, zsh plugins, packer, and tpm
+# Clone the required repos, zsh plugins, and tpm
 - name: Clone configuration 
   git:
     repo: git@github.com:waahm7/configurations.git 
@@ -52,11 +52,6 @@
   git:
     repo: https://github.com/Pilaton/OhMyZsh-full-autoupdate.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/ohmyzsh-full-autoupdate"
-- name: Install Neovim Packer
-  git:
-    repo: https://github.com/wbthomason/packer.nvim
-    dest: "{{ lookup('env', 'HOME') }}/.local/share/nvim/site/pack/packer/start/packer.nvim"
-    depth: 1
 - name: Install Tmux Plugin Manager
   git:
     repo: https://github.com/tmux-plugins/tpm
