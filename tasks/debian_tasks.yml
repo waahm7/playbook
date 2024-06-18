@@ -20,6 +20,7 @@
       - python3-venv
       - python3-boto3
       - unzip
+      - maven
     state: present
     update_cache: yes
   become: yes

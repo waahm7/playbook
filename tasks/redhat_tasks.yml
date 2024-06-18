@@ -12,6 +12,7 @@
       - g++
       - gdb
       - util-linux-user #chsh requires it
+      - maven
     state: present
   become: yes
 - name: Install boto3 with pip3
