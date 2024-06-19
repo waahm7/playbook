@@ -18,16 +18,15 @@
     - iterm2
     - todoist
     - alfred
-    - google-chrome
-    - nvalt
     - fantastical
     - font-fira-code
     - font-hack-nerd-font
     - visual-studio-code
     - vlc
     - zwift
-    - karabiner-elements
     - selfcontrol
+    - lunar
+    - firefox
   tags: homebrew_cask
 
 - name: Install additional Homebrew packages
