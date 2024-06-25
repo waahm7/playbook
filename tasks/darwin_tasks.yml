@@ -47,6 +47,7 @@
     - llvm
     - tmux
     - ansible
+    - pipx
   tags: homebrew
 
 - name: Install Mac App Store applications
