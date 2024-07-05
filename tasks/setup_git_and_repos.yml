@@ -4,68 +4,68 @@
     scope: global
     name: core.excludesfile
     value: "{{ config_path }}/dotfiles/gitignore_global"
-  tag: always
+  tags: always
 - name: Git personal setup email
   git_config:
     name: user.email
     scope: global
     value: "waahm7@gmail.com"
-  tag: always
+  tags: always
 - name: Git personal setup name
   git_config:
     name: user.name
     scope: global
     value: "Waqar Ahmed Khan"
-  tag: always
+  tags: always
 # Clone the required repos, zsh plugins, and tpm
-- name: Clone configuration 
+- name: Clone configuration
   git:
-    repo: git@github.com:waahm7/configurations.git 
+    repo: git@github.com:waahm7/configurations.git
     dest: "{{ lookup('env', 'HOME') }}/configurations"
-  tag: always
+  tags: always
 #omz config
 - name: Check if Oh-My-Zsh is installed
   stat:
     path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
   register: oh_my_stats
-  tag: always
+  tags: always
 - name: Install Oh-My-Zsh
   shell: |
     curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer &&
     chmod +x ~/.oh-my-installer &&
     ~/.oh-my-installer
   when: oh_my_stats.stat.exists == False
-  tag: always
+  tags: always
 - name: Clone zsh-syntax-highlighting
   git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
-  tag: always
+  tags: always
 - name: Clone zsh-autosuggestions
   git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
-  tag: always
+  tags: always
 - name: Clone zsh-autocomplete
   git:
     repo: https://github.com/marlonrichert/zsh-autocomplete.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/zsh-autocomplete"
     depth: 1
-  tag: always
+  tags: always
 - name: Clone powerlevel10k
   git:
     repo: https://github.com/romkatv/powerlevel10k.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/themes/powerlevel10k"
     depth: 1
-  tag: always
+  tags: always
 - name: Clone ohmyzsh-full-autoupdate
   git:
     repo: https://github.com/Pilaton/OhMyZsh-full-autoupdate.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/ohmyzsh-full-autoupdate"
-  tag: always
+  tags: always
 - name: Install Tmux Plugin Manager
   git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm"
-  tag: always
+  tags: always
 

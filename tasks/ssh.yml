@@ -3,26 +3,26 @@
     dest: "{{ dest_key | dirname }}"
     mode: 0700
     state: directory
-  tag: always
+  tags: always
 - name: Install ssh key
   copy:
     src: "{{ src_key }}"
     dest: "{{ dest_key }}"
     mode: 0600
-  tag: always
+  tags: always
 - name: Install ssh key public
   copy:
     src: "{{ src_key }}.pub"
     dest: "{{ dest_key }}.pub"
     mode: 0644
-  tag: always
+  tags: always
 - name: Check if github.com is already in known hosts
   shell: grep -q github.com ~/.ssh/known_hosts || echo "not found"
   register: check
   ignore_errors: true
-  tag: always
-- name: Add github.com to known hosts 
+  tags: always
+- name: Add github.com to known hosts
   shell: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
   when: check.stdout == "not found"
-  tag: always
+  tags: always
 

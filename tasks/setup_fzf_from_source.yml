@@ -1,15 +1,15 @@
 - name: Check if fzf is already installed
   command: fzf --version
-  register: fzf_version 
+  register: fzf_version
   ignore_errors: yes
   changed_when: false
-  tag: always
-- name: Install fzf 
+  tags: always
+- name: Install fzf
   shell: |
     git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
     {{ lookup('env', 'HOME') }}/.fzf/install --all
   args:
     creates: "{{ lookup('env', 'HOME') }}/.fzf"
   when: fzf_version.rc !=0
-  tag: always
+  tags: always
 

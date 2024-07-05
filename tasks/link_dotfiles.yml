@@ -3,33 +3,33 @@
   file:
     dest: "{{ lookup('env', 'HOME') }}/.config"
     state: directory
-  tag: always
+  tags: always
 - name: Link Neovim configuration
   ansible.builtin.file:
     src: "{{ config_path }}/nvim"
     dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
     state: link
     force: yes
-  tag: always
+  tags: always
 - name: Link tmux.conf
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/tmux.conf"
     dest: "{{ lookup('env', 'HOME') }}/.tmux.conf"
     state: link
     force: yes
-  tag: always
+  tags: always
 - name: Link p10k.zsh
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/p10k.zsh"
     dest: "{{ lookup('env', 'HOME') }}/.p10k.zsh"
     state: link
     force: yes
-  tag: always
+  tags: always
 - name: Link .zshrc
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/zshrc"
     dest: "{{ lookup('env', 'HOME') }}/.zshrc"
     state: link
     force: yes
-  tag: always
+  tags: always
 

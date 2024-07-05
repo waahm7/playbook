@@ -3,12 +3,12 @@
   register: rustc_version
   ignore_errors: yes
   changed_when: false
-  tag: always
-- name: Install Rust 
+  tags: always
+- name: Install Rust
   shell: |
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     . $HOME/.cargo/env
   args:
     creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/rustc"
   when: rustc_version.rc != 0
-  tag: always
+  tags: always
