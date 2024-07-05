@@ -3,6 +3,7 @@
   register: fzf_version 
   ignore_errors: yes
   changed_when: false
+  tag: always
 - name: Install fzf 
   shell: |
     git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
@@ -10,4 +11,5 @@
   args:
     creates: "{{ lookup('env', 'HOME') }}/.fzf"
   when: fzf_version.rc !=0
+  tag: always
 

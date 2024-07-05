@@ -3,6 +3,7 @@
     repo: ppa:neovim-ppa/unstable
     state: present
   become: yes
+  tag: always
 - name: Install Apt Packages 
   apt: 
     name: 
@@ -24,10 +25,13 @@
     state: present
     update_cache: yes
   become: yes
+  tag: always
 - name: Change shell to zsh
   user:
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
   become: yes
+  tag: always
 - name: Setup fzf from Source 
   ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
+  tag: always

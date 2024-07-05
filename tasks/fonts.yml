@@ -1,33 +1,40 @@
 - name: Set font directory variable based on OS
   set_fact:
     font_dir: "{{ (ansible_os_family == 'Darwin') | ternary('/Library/Fonts/powerlevel10k', '/usr/local/share/fonts/') }}"
+  tag: always
 - name: Ensure font directory exists
   file:
     path: "{{ font_dir }}"
     state: directory
     mode: '0755'
   become: yes
+  tag: always
 - name: Download Powerlevel10k MesloLGS NF Regular font
   get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
     dest: "{{ font_dir }}/MesloLGS NF Regular.ttf"
   become: yes
+  tag: always
 - name: Download Powerlevel10k MesloLGS NF Bold font
   get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
     dest: "{{ font_dir }}/MesloLGS NF Bold.ttf"
   become: yes
+  tag: always
 - name: Download Powerlevel10k MesloLGS NF Italic font
   get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
     dest: "{{ font_dir }}/MesloLGS NF Italic.ttf"
   become: yes
+  tag: always
 - name: Download Powerlevel10k MesloLGS NF Bold Italic font
   get_url:
     url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
     dest: "{{ font_dir }}/MesloLGS NF Bold Italic.ttf"
   become: yes
+  tag: always
 - name: Update font cache on Linux
   command: fc-cache -f -v
   when: ansible_os_family != 'Darwin'
+  tag: always
 

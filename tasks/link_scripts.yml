@@ -6,46 +6,41 @@
 #    mode: '0755'
 #  become: yes
 #  tags:
-#    - scripts
+#    
 - name: Make tmux-sessionizer script executable
   file:
     path: "{{ config_path }}/usr/local/bin/tmux-sessionizer"
     mode: '0755'
-  tags:
-    - scripts
+  tag: always
 - name: Symlink tmux-sessionizer to /usr/local/bin
   file:
     src: "{{ config_path }}/usr/local/bin/tmux-sessionizer"
     dest: "/usr/local/bin/tmux-sessionizer"
     state: link
   become: yes
-  tags:
-    - scripts
+  tag: always
 - name: Make syncgr script executable
   file:
     path: "{{ config_path }}/usr/local/bin/syncgr"
     mode: '0755'
-  tags:
-    - scripts
+  tag: always
 - name: Symlink syncgr to /usr/local/bin
   file:
     src: "{{ config_path }}/usr/local/bin/syncgr"
     dest: "/usr/local/bin/syncgr"
     state: link
   become: yes
-  tags:
-    - scripts
+  tag: always
 - name: Make ec2 script executable
   file:
     path: "{{ config_path }}/usr/local/bin/ec2"
     mode: '0755'
-  tags:
-    - scripts
+  tag: always
 - name: Symlink ec2 to /usr/local/bin
   file:
     src: "{{ config_path }}/usr/local/bin/ec2"
     dest: "/usr/local/bin/ec2"
     state: link
   become: yes
-  tags:
-    - scripts
+  tag: always
+    

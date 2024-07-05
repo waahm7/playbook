@@ -3,16 +3,14 @@
   register: rg_version
   ignore_errors: yes
   changed_when: false
-  tags:
-    - ripgrep
+  tag: always
 - name: Clone ripgrep repository
   git:
     repo: 'https://github.com/BurntSushi/ripgrep.git'
     dest: "{{ lookup('env', 'HOME') }}/ripgrep"
     update: no
   when: rg_version.rc != 0
-  tags:
-    - ripgrep
+  tag: always
 - name: Build ripgrep from source
   shell: |
     source $HOME/.cargo/env
@@ -20,8 +18,7 @@
   args:
     creates: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
   when: rg_version.rc != 0
-  tags:
-    - ripgrep
+  tag: always
 - name: Copy ripgrep binary to /usr/local/bin
   copy:
     src: "{{ lookup('env', 'HOME') }}/ripgrep/target/release/rg"
@@ -29,6 +26,5 @@
     mode: '0755'
   when: rg_version.rc != 0
   become: yes
-  tags:
-    - ripgrep
+  tag: always
 
