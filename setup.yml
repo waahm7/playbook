@@ -17,7 +17,6 @@
       ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
         - rust 
-        - packages
     - name: Include OS specific tasks
       ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
@@ -25,7 +24,7 @@
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
-        - git 
+        - git
         - dotfiles
     - name: Link dotfiles
       ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
@@ -34,7 +33,7 @@
     - name: Link Scripts
       ansible.builtin.include_tasks: "tasks/link_scripts.yml"
       tags: 
-        - scripts 
+        - dotfiles 
     - name: Setup Amazon Work 
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 
