@@ -13,6 +13,7 @@
       - gdb
       - util-linux-user #chsh requires it
       - maven
+      - ninja-build
     state: present
   become: yes
   tags: always
