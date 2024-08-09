@@ -5,18 +5,6 @@
     name: core.excludesfile
     value: "{{ config_path }}/dotfiles/gitignore_global"
   tags: always
-- name: Git personal setup email
-  git_config:
-    name: user.email
-    scope: global
-    value: "waahm7@gmail.com"
-  tags: always
-- name: Git personal setup name
-  git_config:
-    name: user.name
-    scope: global
-    value: "Waqar Ahmed Khan"
-  tags: always
 # Clone the required repos, zsh plugins, and tpm
 - name: Clone configuration
   git:

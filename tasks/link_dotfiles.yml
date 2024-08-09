@@ -33,3 +33,18 @@
     force: yes
   tags: always
 
+- name: Link .gitconfig
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/gitconfig"
+    dest: "{{ lookup('env', 'HOME') }}/.gitconfig"
+    state: link
+    force: yes
+  tags: always
+
+- name: Link .gitignore
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/gitignore_global"
+    dest: "{{ lookup('env', 'HOME') }}/.gitignore_global"
+    state: link
+    force: yes
+  tags: always
