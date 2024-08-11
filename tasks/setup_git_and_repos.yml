@@ -51,6 +51,11 @@
     repo: https://github.com/Pilaton/OhMyZsh-full-autoupdate.git
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/ohmyzsh-full-autoupdate"
   tags: always
+- name: Clone fzf-tab 
+  git:
+    repo: https://github.com/Aloxaf/fzf-tab 
+    dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/fzf-tab"
+  tags: always
 - name: Install Tmux Plugin Manager
   git:
     repo: https://github.com/tmux-plugins/tpm
