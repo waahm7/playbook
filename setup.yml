@@ -42,3 +42,6 @@
       ansible.builtin.include_tasks: "tasks/fonts.yml"
       tags: 
         - fonts 
+    - name: Enable fzf-tab
+      shell: enable-fzf-tab
+      tags: fzf
