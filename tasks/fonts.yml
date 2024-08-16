@@ -33,8 +33,3 @@
     dest: "{{ font_dir }}/MesloLGS NF Bold Italic.ttf"
   become: yes
   tags: always
-- name: Update font cache on Linux
-  command: fc-cache -f -v
-  when: ansible_os_family != 'Darwin'
-  tags: always
-
