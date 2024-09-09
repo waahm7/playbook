@@ -1,32 +1,36 @@
-- name: Check if neovim is already installed
+- name: Check if Neovim is already installed
   command: nvim --version
   register: nvim_version
   ignore_errors: yes
   changed_when: false
   tags: always
+
 - name: Upgrade pip and install Neovim package for Python
   pip:
     name: neovim
     state: latest
   tags: always
-- name: Clone Neovim repository
-  git:
-    repo: 'https://github.com/neovim/neovim.git'
-    dest: '/tmp/neovim'
-    update: no
+
+- name: Download Neovim latest release
+  get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
+    dest: /tmp/nvim-linux64.tar.gz
   when: nvim_version.rc != 0
   tags: always
-- name: Build Neovim from source
-  command: make CMAKE_BUILD_TYPE=Release -j
-  args:
-    chdir: /tmp/neovim
+
+- name: Remove existing Neovim installation
+  file:
+    path: /opt/nvim
+    state: absent
   when: nvim_version.rc != 0
+  become: yes
   tags: always
-- name: Install Neovim
-  command: make install
-  args:
-    chdir: /tmp/neovim
-    creates: /usr/local/bin/nvim
+
+- name: Extract Neovim to /opt
+  unarchive:
+    src: /tmp/nvim-linux64.tar.gz
+    dest: /opt
+    remote_src: yes
   when: nvim_version.rc != 0
   become: yes
   tags: always
