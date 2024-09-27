@@ -7,7 +7,7 @@
       - python3-pip
       - zsh
       - tmux
-      #      - npm
+      - npm
       - gcc
       - g++
       - gdb
