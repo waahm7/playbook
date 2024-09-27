@@ -1,9 +1,3 @@
-- name: Add the Neovim PPA
-  apt_repository:
-    repo: ppa:neovim-ppa/unstable
-    state: present
-  become: yes
-  tags: always
 - name: Install Apt Packages
   apt:
     name:
@@ -16,7 +10,6 @@
       - g++
       - ripgrep
       - make
-      - neovim
       - python3-pip
       - python3-venv
       - python3-boto3
@@ -31,6 +24,9 @@
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
   become: yes
+  tags: always
+- name: Setup Neovim from Source
+  ansible.builtin.include_tasks: "setup_nvim_from_source.yml"
   tags: always
 - name: Setup fzf from Source
   ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
