@@ -6,5 +6,3 @@ sudo apt install -y ansible git
 git clone https://github.com/waahm7/playbook ~/playbook
 cd ~/playbook
 ansible-playbook --ask-vault-pass setup.yml
-cd ~
-sudo rm -rf ~/playbook
