@@ -5,12 +5,6 @@
   changed_when: false
   tags: always
 
-- name: Upgrade pip and install Neovim package for Python
-  pip:
-    name: neovim
-    state: latest
-  tags: always
-
 - name: Download Neovim latest release
   get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux64.tar.gz
