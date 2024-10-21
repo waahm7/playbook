@@ -37,19 +37,13 @@
   tags:
     - always
 
-- name: Check if aws-s3-transfer-manager-rs directory exists
-  stat:
-    path: "{{ ansible_env.HOME }}/work/aws-s3-transfer-manager-rs"
-  register: aws_s3_transfer_manager_dir
-  tags:
-    - always
-- name: Clone rust transfer-manager 
+- name: Clone rust transfer-manager if directory does not exist
   git:
     repo: 'git@github.com:awslabs/aws-s3-transfer-manager-rs.git'
     dest: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs"
     clone: yes
     update: no
-  when: not aws_s3_transfer_manager_dir.stat.exists
+    creates: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs/.git"
   tags:
     - always
 

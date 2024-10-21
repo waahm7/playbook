@@ -38,9 +38,13 @@
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 
         - amazon 
-    - name: Enable fzf-tab
-      shell: enable-fzf-tab
-      tags: fzf
+    - name: Enable fzf-tab 
+      shell: |
+        source ~/.zshrc && enable-fzf-tab
+      args:
+        executable: /bin/zsh
+      tags:
+        - fzf
     - name: Setup Fonts 
       ansible.builtin.include_tasks: "tasks/fonts.yml"
       tags: 
