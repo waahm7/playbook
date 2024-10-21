@@ -20,6 +20,7 @@
         target_bandwidth=100Gb/s
   tags:
     - always
+
 - name: Check if aws-c-crt directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-c-crt"
@@ -35,6 +36,23 @@
   when: not aws_c_crt_dir.stat.exists
   tags:
     - always
+
+- name: Check if aws-s3-transfer-manager-rs directory exists
+  stat:
+    path: "{{ ansible_env.HOME }}/work/aws-s3-transfer-manager-rs"
+  register: aws_s3_transfer_manager_dir
+  tags:
+    - always
+- name: Clone rust transfer-manager 
+  git:
+    repo: 'git@github.com:awslabs/aws-s3-transfer-manager-rs.git'
+    dest: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs"
+    clone: yes
+    update: no
+  when: not aws_s3_transfer_manager_dir.stat.exists
+  tags:
+    - always
+
 - name: Check if aws-crt-s3-benchmarks directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-crt-s3-benchmarks"
