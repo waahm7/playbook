@@ -62,7 +62,7 @@
     - always
 - name: Clone aws-crt-s3-benchmarks repository 
   git:
-    repo: 'git@github.com:waahm7/aws-crt-s3-benchmarks.git'
+    repo: 'git@github.com:awslabs/aws-crt-s3-benchmarks.git'
     dest: "{{ lookup('env', 'HOME') }}/work/aws-crt-s3-benchmarks"
     clone: yes
     update: no
