@@ -46,7 +46,7 @@
     - always
 - name: Clone aws-s3-transfer-manager-rs repository 
   git:
-    repo: 'git@github.com:waahm7/aws-s3-transfer-manager-rs.git'
+    repo: 'git@github.com:awslabs/aws-s3-transfer-manager-rs.git'
     dest: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs"
     clone: yes
     update: no
