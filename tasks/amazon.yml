@@ -43,6 +43,8 @@
     dest: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs"
     clone: yes
     update: no
+  when: not (ansible_stat.stat.exists)
+  args:
     creates: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs/.git"
   tags:
     - always
