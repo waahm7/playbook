@@ -41,7 +41,7 @@
 - name: Check if aws-s3-transfer-manager-rs directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-s3-transfer-manager-rs"
-  register: aws-s3-transfer-manager-rs-dir
+  register: aws_s3_transfer_manager_rs_dir
   tags:
     - always
 - name: Clone aws-s3-transfer-manager-rs repository 
@@ -50,14 +50,14 @@
     dest: "{{ lookup('env', 'HOME') }}/work/aws-s3-transfer-manager-rs"
     clone: yes
     update: no
-  when: not aws-s3-transfer-manager-rs-dir.stat.exists
+  when: not aws_s3_transfer_manager_rs_dir.stat.exists
   tags:
     - always
 
 - name: Check if aws-crt-s3-benchmarks directory exists
   stat:
     path: "{{ ansible_env.HOME }}/work/aws-crt-s3-benchmarks"
-  register: aws-crt-s3-benchmarks-dir
+  register: aws_crt_s3_benchmarks_dir
   tags:
     - always
 - name: Clone aws-crt-s3-benchmarks repository 
@@ -66,7 +66,7 @@
     dest: "{{ lookup('env', 'HOME') }}/work/aws-crt-s3-benchmarks"
     clone: yes
     update: no
-  when: not aws-crt-s3-benchmarks-dir.stat.exists
+  when: not aws_crt_s3_benchmarks_dir.stat.exists
   tags:
     - always
 
