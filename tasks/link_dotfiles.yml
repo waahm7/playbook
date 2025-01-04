@@ -4,6 +4,18 @@
     dest: "{{ lookup('env', 'HOME') }}/.config"
     state: directory
   tags: always
+- name: Ensure ~/.config/ghostty directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.config/ghostty"
+    state: directory
+  tags: always
+- name: Link Ghostty configuration
+  ansible.builtin.file:
+    src: "{{ config_path }}/nvim"
+    dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
+    state: link
+    force: yes
+  tags: always
 - name: Link Neovim configuration
   ansible.builtin.file:
     src: "{{ config_path }}/nvim"
