@@ -11,8 +11,8 @@
   tags: always
 - name: Link Ghostty configuration
   ansible.builtin.file:
-    src: "{{ config_path }}/nvim"
-    dest: "{{ lookup('env', 'HOME') }}/.config/nvim"
+    src: "{{ config_path }}/dotfiles/ghostty-config"
+    dest: "{{ lookup('env', 'HOME') }}/.config/ghostty/config"
     state: link
     force: yes
   tags: always
