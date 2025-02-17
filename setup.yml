@@ -7,6 +7,10 @@
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
+    - name: Set timezone to Asia/Tokyo
+      become: true
+      community.general.timezone:
+        name: America/Los_Angeles
     - name: install ssh 
       ansible.builtin.include_tasks: "tasks/ssh.yml"
       tags:
