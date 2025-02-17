@@ -6,6 +6,7 @@
     config_path: "{{ lookup('env', 'HOME') }}/configurations"
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+    nvim_archive: "{{ 'nvim-linux-arm64.tar.gz' if ansible_architecture == 'aarch64' else 'nvim-linux-x86_64.tar.gz' }}"
   tasks:
     - name: Set timezone to Asia/Tokyo
       become: true

@@ -6,8 +6,6 @@
   tags: always
 
 - name: Download Neovim latest release
-  vars:
-    nvim_archive: "{{ 'nvim-linux-arm64.tar.gz' if ansible_architecture == 'aarch64' else 'nvim-linux-x86_64.tar.gz' }}"
   get_url:
     url: "https://github.com/neovim/neovim/releases/latest/download/{{ nvim_archive }}"
     dest: "/tmp/{{ nvim_archive }}"
