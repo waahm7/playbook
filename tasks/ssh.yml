@@ -4,18 +4,35 @@
     mode: 0700
     state: directory
   tags: always
+
+- name: Check if private key exists
+  stat:
+    path: "{{ dest_key }}"
+  register: private_key
+  tags: always
+
+- name: Check if public key exists
+  stat:
+    path: "{{ dest_key }}.pub"
+  register: public_key
+  tags: always
+
 - name: Install ssh key
   copy:
     src: "{{ src_key }}"
     dest: "{{ dest_key }}"
     mode: 0600
+  when: not private_key.stat.exists
   tags: always
+
 - name: Install ssh key public
   copy:
     src: "{{ src_key }}.pub"
     dest: "{{ dest_key }}.pub"
     mode: 0644
+  when: not public_key.stat.exists
   tags: always
+
 - name: Check if github.com is already in known hosts
   shell: grep -q github.com ~/.ssh/known_hosts || echo "not found"
   register: check
