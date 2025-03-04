@@ -62,9 +62,3 @@
     repo: https://github.com/Aloxaf/fzf-tab 
     dest: "{{ lookup('env', 'HOME') }}/.oh-my-zsh/custom/plugins/fzf-tab"
   tags: always
-- name: Install Tmux Plugin Manager
-  git:
-    repo: https://github.com/tmux-plugins/tpm
-    dest: "{{ lookup('env', 'HOME') }}/.tmux/plugins/tpm"
-  tags: always
-
