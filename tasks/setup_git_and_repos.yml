@@ -5,11 +5,17 @@
     name: core.excludesfile
     value: "{{ config_path }}/dotfiles/gitignore_global"
   tags: always
-# Clone the required repos, zsh plugins, and tpm
+- name: Check if configuration is cloned
+  stat:
+    path: "{{ lookup('env', 'HOME') }}/configurations"
+  register: configuration_exists
+  tags: always
+
 - name: Clone configuration
   git:
     repo: git@github.com:waahm7/configurations.git
     dest: "{{ lookup('env', 'HOME') }}/configurations"
+  when: configuration_exists == False
   tags: always
 #omz config
 - name: Check if Oh-My-Zsh is installed
