@@ -1,15 +1,14 @@
 - name: Check if Neovim is already installed
-  command: nvim --version
-  register: nvim_version
-  ignore_errors: yes
-  changed_when: false
+  stat:
+    path: "/opt/nvim"
+  register: nvim_exists
   tags: always
 
 - name: Download Neovim latest release
   get_url:
     url: "https://github.com/neovim/neovim/releases/latest/download/{{ nvim_archive }}"
     dest: "/tmp/{{ nvim_archive }}"
-  when: nvim_version.rc != 0
+  when: nvim_exists.stat.exists != 0
   tags: always
 
 - name: Extract Neovim to /opt
@@ -17,13 +16,12 @@
     src: "/tmp/{{ nvim_archive }}"
     dest: /opt
     remote_src: yes
-  when: nvim_version.rc != 0
+  when: nvim_exists.stat.exists != 0
   become: yes
   tags: always
-  failed_when: false
 
 - name: Rename Neovim directory
   shell: mv /opt/nvim-* /opt/nvim
-  when: nvim_version.rc != 0
+  when: nvim_exists.stat.exists != 0
   become: yes
   tags: always
