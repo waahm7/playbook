@@ -8,20 +8,19 @@
   get_url:
     url: "https://github.com/neovim/neovim/releases/latest/download/{{ nvim_archive }}"
     dest: "/tmp/{{ nvim_archive }}"
-  when: nvim_exists.stat.exists != 0
+  when: nvim_exists.stat.exists == False
   tags: always
-
 - name: Extract Neovim to /opt
   unarchive:
     src: "/tmp/{{ nvim_archive }}"
     dest: /opt
     remote_src: yes
-  when: nvim_exists.stat.exists != 0
+  when: nvim_exists.stat.exists == False
   become: yes
   tags: always
 
 - name: Rename Neovim directory
   shell: mv /opt/nvim-* /opt/nvim
-  when: nvim_exists.stat.exists != 0
+  when: nvim_exists.stat.exists == False 
   become: yes
   tags: always
