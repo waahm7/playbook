@@ -16,7 +16,7 @@
   git:
     repo: git@github.com:waahm7/configurations.git
     dest: "{{ lookup('env', 'HOME') }}/configurations"
-  when: configuration_exists == False
+  when: configuration_exists.stat.exists === False
   tags: always
 #omz config
 - name: Check if Oh-My-Zsh is installed
