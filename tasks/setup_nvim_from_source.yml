@@ -20,6 +20,7 @@
   when: nvim_version.rc != 0
   become: yes
   tags: always
+  failed_when: false
 
 - name: Rename Neovim directory
   shell: mv /opt/nvim-* /opt/nvim

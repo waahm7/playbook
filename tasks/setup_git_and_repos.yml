@@ -5,6 +5,7 @@
     name: core.excludesfile
     value: "{{ config_path }}/dotfiles/gitignore_global"
   tags: always
+
 - name: Check if configuration is cloned
   stat:
     path: "{{ lookup('env', 'HOME') }}/configurations"
