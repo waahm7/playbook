@@ -18,6 +18,14 @@
         - dotfiles
         - ssh
         - git
+    - name: Link dotfiles
+      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
+      tags: 
+        - dotfiles
+    - name: Link Scripts
+      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
+      tags: 
+        - dotfiles 
     - name: setup rust 
       ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
@@ -37,14 +45,6 @@
       tags: 
         - git
         - dotfiles
-    - name: Link dotfiles
-      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
-      tags: 
-        - dotfiles
-    - name: Link Scripts
-      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
-      tags: 
-        - dotfiles 
     - name: Setup Amazon Work 
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 

@@ -9,6 +9,12 @@
     dest: "{{ lookup('env', 'HOME') }}/.config/ghostty"
     state: directory
   tags: always
+- name: Ensure ~/.config/mise directory exists
+  file:
+    dest: "{{ lookup('env', 'HOME') }}/.config/mise"
+    state: directory
+  tags: always
+
 - name: Link Ghostty configuration
   ansible.builtin.file:
     src: "{{ config_path }}/dotfiles/ghostty-config"
