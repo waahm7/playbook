@@ -48,6 +48,8 @@
     - tmux
     - ansible
     - pipx
+    # remove other languages
+    - mise
   tags: homebrew
 
 - name: Install Mac App Store applications

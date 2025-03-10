@@ -1,0 +1,24 @@
+- name: Setup Neovim from Source
+  ansible.builtin.include_tasks: "setup_nvim_from_source.yml"
+  tags: always
+- name: Setup fzf from Source
+  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
+  tags: always
+- name: Check if mise is already installed
+  command: which mise
+  register: mise_check
+  ignore_errors: true
+  changed_when: false
+  check_mode: no
+  tags: always
+- name: Install mise
+  shell: curl https://mise.run | sh
+  args:
+    executable: /bin/bash
+    warn: false
+  register: mise_install
+  when: mise_check.rc != 0
+  environment:
+   PATH: "{{ ansible_env.PATH }}"
+  tags: always
+

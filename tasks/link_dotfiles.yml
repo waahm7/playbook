@@ -60,3 +60,11 @@
     state: link
     force: yes
   tags: always
+
+- name: Link mise config 
+  ansible.builtin.file:
+    src: "{{ config_path }}/dotfiles/mise_config.toml"
+    dest: "{{ lookup('env', 'HOME') }}/.config/mise/config.toml"
+    state: link
+    force: yes
+  tags: always

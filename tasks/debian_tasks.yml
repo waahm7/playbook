@@ -25,9 +25,3 @@
     shell: /bin/zsh
   become: yes
   tags: always
-- name: Setup Neovim from Source
-  ansible.builtin.include_tasks: "setup_nvim_from_source.yml"
-  tags: always
-- name: Setup fzf from Source
-  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
-  tags: always
