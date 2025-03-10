@@ -13,12 +13,6 @@
   tags: always
 - name: Install mise
   shell: curl https://mise.run | sh
-  args:
-    executable: /bin/bash
-    warn: false
-  register: mise_install
   when: mise_check.rc != 0
-  environment:
-   PATH: "{{ ansible_env.PATH }}"
   tags: always
 
