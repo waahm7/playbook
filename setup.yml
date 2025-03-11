@@ -18,19 +18,6 @@
         - dotfiles
         - ssh
         - git
-    - name: Install git repositories
-      ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
-      tags: 
-        - git
-        - dotfiles
-    - name: Link dotfiles
-      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
-      tags: 
-        - dotfiles
-    - name: Link Scripts
-      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
-      tags: 
-        - dotfiles 
     - name: setup rust 
       ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
@@ -45,6 +32,19 @@
         ansible_facts['os_family'] in ['Debian', 'RedHat', 'Archlinux', 'Alpine']
       tags: 
         - os
+    - name: Install git repositories
+      ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
+      tags: 
+        - git
+        - dotfiles
+    - name: Link dotfiles
+      ansible.builtin.include_tasks: "tasks/link_dotfiles.yml"
+      tags: 
+        - dotfiles
+    - name: Link Scripts
+      ansible.builtin.include_tasks: "tasks/link_scripts.yml"
+      tags: 
+        - dotfiles 
     - name: Setup Amazon Work 
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 
