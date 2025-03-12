@@ -22,16 +22,6 @@
       ansible.builtin.include_tasks: "tasks/setup_rust.yml"
       tags:
         - rust 
-    - name: Include OS specific tasks
-      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
-      tags: 
-        - os
-    - name: Include Linux Tasks 
-      ansible.builtin.include_tasks: "tasks/linux_tasks.yml"
-      when: >
-        ansible_facts['os_family'] in ['Debian', 'RedHat', 'Archlinux', 'Alpine']
-      tags: 
-        - os
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
@@ -45,6 +35,20 @@
       ansible.builtin.include_tasks: "tasks/link_scripts.yml"
       tags: 
         - dotfiles 
+    - name: Include OS specific tasks
+      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
+      tags: 
+        - os
+    - name: Include Linux Tasks 
+      ansible.builtin.include_tasks: "tasks/linux_tasks.yml"
+      when: >
+        ansible_facts['os_family'] in ['Debian', 'RedHat', 'Archlinux', 'Alpine']
+      tags: 
+        - os
+    - name: Include Common OS Tasks 
+      ansible.builtin.include_tasks: "tasks/common_os_tasks.yml"
+      tags: 
+        - os
     - name: Setup Amazon Work 
       ansible.builtin.include_tasks: "tasks/amazon.yml"
       tags: 

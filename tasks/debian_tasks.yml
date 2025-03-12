@@ -2,7 +2,6 @@
   apt:
     name:
       - zsh
-      - gnupg #adding neovim ppa requires it
       - tmux
       - cmake
       - npm
@@ -15,6 +14,7 @@
       - python3-boto3
       - unzip
       - maven
+      - nload
     state: present
     update_cache: yes
   become: yes
