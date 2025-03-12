@@ -61,7 +61,5 @@
     - 425424353  # The Unarchiver
   tags: mas
 
-- name: Setup SelfControl to allow one month block
-  command: defaults write org.eyebeam.SelfControl MaxBlockLength -int 43200
-  tags: selfcontrol
-
+- name: Run mise install
+  ansible.builtin.command: "/opt/homebrew/bin/mise install"

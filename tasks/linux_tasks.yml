@@ -15,4 +15,7 @@
   shell: curl https://mise.run | sh
   when: mise_check.rc != 0
   tags: always
-
+- name: Run mise install
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/mise install"
+  when: mise_check.rc != 0
+  tags: always
