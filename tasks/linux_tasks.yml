@@ -4,18 +4,16 @@
 - name: Setup fzf from Source
   ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
   tags: always
-- name: Check if mise is already installed
-  command: which mise
-  register: mise_check
-  ignore_errors: true
-  changed_when: false
-  check_mode: no
+- name: Check if Mise is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.local/bin/mise"
+  register: mise_installed
   tags: always
 - name: Install mise
   shell: curl https://mise.run | sh
-  when: mise_check.rc != 0
+  when: mise_installed.stat.exists == False
   tags: always
 - name: Run mise install
   ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/mise install"
-  when: mise_check.rc != 0
+  when: mise_installed.stat.exists == False
   tags: always
