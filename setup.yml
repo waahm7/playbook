@@ -8,7 +8,7 @@
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
     nvim_archive: "{{ 'nvim-linux-arm64.tar.gz' if ansible_architecture == 'aarch64' else 'nvim-linux-x86_64.tar.gz' }}"
   tasks:
-    - name: Set timezone to Asia/Tokyo
+    - name: Set timezone
       become: true
       community.general.timezone:
         name: America/Los_Angeles
