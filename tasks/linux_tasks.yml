@@ -13,7 +13,10 @@
   shell: curl https://mise.run | sh
   when: mise_installed.stat.exists == False
   tags: always
-- name: Run mise install
-  ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/mise run setup"
+- name: Run mise setup
+  ansible.builtin.command: "mise run setup"
+  environment:
+    PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
   when: mise_installed.stat.exists == False
   tags: always
+
