@@ -10,6 +10,21 @@
     ~/.oh-my-installer
   when: oh_my_stats.stat.exists == False
   tags: always
+- name: Check if .zshrc.pre-oh-my-zsh exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.zshrc.pre-oh-my-zsh"
+  register: zshrc_backup
+  tags: zsh
+- name: Restore original .zshrc from pre-oh-my-zsh backup
+  block:
+    - name: Remove current .zshrc
+      file:
+        path: "{{ ansible_env.HOME }}/.zshrc"
+        state: absent
+    - name: Move .zshrc.pre-oh-my-zsh to .zshrc
+      command: mv "{{ ansible_env.HOME }}/.zshrc.pre-oh-my-zsh" "{{ ansible_env.HOME }}/.zshrc"
+  when: zshrc_backup.stat.exists
+  tags: zsh
 - name: Clone zsh-syntax-highlighting
   git:
     repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
