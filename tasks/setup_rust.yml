@@ -1,14 +1,14 @@
-- name: Check if Rust is already installed
-  command: rustc --version
-  register: rustc_version
-  ignore_errors: yes
-  changed_when: false
-  tags: always
-- name: Install Rust
-  shell: |
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    . $HOME/.cargo/env
-  args:
-    creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/rustc"
-  when: rustc_version.rc != 0
-  tags: always
+# - name: Check if Rust is already installed
+#   command: rustc --version
+#   register: rustc_version
+#   ignore_errors: yes
+#   changed_when: false
+#   tags: always
+# - name: Install Rust
+#   shell: |
+#     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+#     . $HOME/.cargo/env
+#   args:
+#     creates: "{{ lookup('env', 'HOME') }}/.cargo/bin/rustc"
+#   when: rustc_version.rc != 0
+#   tags: always

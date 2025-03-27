@@ -18,10 +18,11 @@
         - dotfiles
         - ssh
         - git
-    - name: setup rust 
-      ansible.builtin.include_tasks: "tasks/setup_rust.yml"
-      tags:
-        - rust 
+    # Currently, using mise. Remove it after a while if that works good.
+    # - name: setup rust 
+    #   ansible.builtin.include_tasks: "tasks/setup_rust.yml"
+    #   tags:
+    #     - rust 
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
