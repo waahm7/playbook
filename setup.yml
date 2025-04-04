@@ -36,14 +36,14 @@
       ansible.builtin.include_tasks: "tasks/link_scripts.yml"
       tags: 
         - dotfiles 
-    - name: Include OS specific tasks
-      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
-      tags: 
-        - os
     - name: Include Linux Tasks 
       ansible.builtin.include_tasks: "tasks/linux_tasks.yml"
       when: >
         ansible_facts['os_family'] in ['Debian', 'RedHat', 'Archlinux', 'Alpine']
+      tags: 
+        - os
+    - name: Include OS specific tasks
+      ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
       tags: 
         - os
     - name: Include Common OS Tasks 
