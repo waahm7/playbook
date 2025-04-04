@@ -38,8 +38,10 @@
   register: check
   ignore_errors: true
   tags: always
+  become: true
 - name: Add github.com to known hosts
   shell: ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
   when: check.stdout == "not found"
   tags: always
+  become: true
 
