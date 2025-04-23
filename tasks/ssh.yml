@@ -38,7 +38,6 @@
   register: check
   ignore_errors: true
   tags: always
-  become: true
 
 - name: Add github.com to known hosts
   shell: ssh-keyscan github.com >> ~/.ssh/known_hosts
