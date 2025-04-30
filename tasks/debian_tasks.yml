@@ -15,7 +15,6 @@
       - unzip
       - maven
       - nload
-      - fzf
     state: present
     update_cache: yes
   become: yes
