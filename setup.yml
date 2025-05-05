@@ -36,12 +36,13 @@
       ansible.builtin.include_tasks: "tasks/link_scripts.yml"
       tags: 
         - dotfiles 
-    - name: Include Common OS Tasks 
-      ansible.builtin.include_tasks: "tasks/common_os_tasks.yml"
-      tags: 
-        - os
     - name: Include OS specific tasks
       ansible.builtin.include_tasks: "tasks/{{ os }}_tasks.yml"
+      tags: 
+        - os
+    # Installs oh-my-zsh which depends upon zsh which is installed by os specific tasks
+    - name: Include Common OS Tasks 
+      ansible.builtin.include_tasks: "tasks/common_os_tasks.yml"
       tags: 
         - os
     - name: Include Linux Tasks 

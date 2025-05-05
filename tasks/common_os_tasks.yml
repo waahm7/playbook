@@ -1,3 +1,4 @@
+
 - name: Check if Oh-My-Zsh is installed
   stat:
     path: "{{ lookup('env', 'HOME') }}/.oh-my-zsh"
