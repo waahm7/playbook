@@ -8,7 +8,7 @@
 - name: Install fzf
   shell: |
     git clone --depth 1 https://github.com/junegunn/fzf.git {{ lookup('env', 'HOME') }}/.fzf
-    {{ lookup('env', 'HOME') }}/.fzf/install --zsh
+    {{ lookup('env', 'HOME') }}/.fzf/install
   args:
     creates: "{{ lookup('env', 'HOME') }}/.fzf"
   when: fzf_version.rc !=0

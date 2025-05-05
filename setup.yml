@@ -45,6 +45,7 @@
       ansible.builtin.include_tasks: "tasks/common_os_tasks.yml"
       tags: 
         - os
+    # Installs fzf which requires ZSH
     - name: Include Linux Tasks 
       ansible.builtin.include_tasks: "tasks/linux_tasks.yml"
       when: >
