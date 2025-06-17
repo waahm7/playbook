@@ -1,9 +1,6 @@
 - name: Setup Neovim from Source
   ansible.builtin.include_tasks: "setup_nvim_from_source.yml"
   tags: always
-- name: Setup fzf from Source
-  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
-  tags: always
 - name: Check if Mise is installed
   stat:
     path: "{{ ansible_env.HOME }}/.local/bin/mise"
@@ -19,4 +16,6 @@
     PATH: "{{ ansible_env.HOME }}/.local/bin:{{ ansible_env.PATH }}"
   when: mise_installed.stat.exists == False
   tags: always
-
+- name: Setup fzf from Source
+  ansible.builtin.include_tasks: "setup_fzf_from_source.yml"
+  tags: always
