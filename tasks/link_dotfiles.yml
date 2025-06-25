@@ -9,11 +9,11 @@
     dest: "{{ lookup('env', 'HOME') }}/.config/ghostty"
     state: directory
   tags: always
-- name: Ensure ~/.config/mise directory exists
-  file:
-    dest: "{{ lookup('env', 'HOME') }}/.config/mise"
-    state: directory
-  tags: always
+# - name: Ensure ~/.config/mise directory exists
+#   file:
+#     dest: "{{ lookup('env', 'HOME') }}/.config/mise"
+#     state: directory
+#   tags: always
 
 - name: Link Ghostty configuration
   ansible.builtin.file:
@@ -67,10 +67,10 @@
     force: yes
   tags: always
 
-- name: Link mise config 
-  ansible.builtin.file:
-    src: "{{ config_path }}/dotfiles/mise_config.toml"
-    dest: "{{ lookup('env', 'HOME') }}/.config/mise/config.toml"
-    state: link
-    force: yes
-  tags: always
+# - name: Link mise config 
+#   ansible.builtin.file:
+#     src: "{{ config_path }}/dotfiles/mise_config.toml"
+#     dest: "{{ lookup('env', 'HOME') }}/.config/mise/config.toml"
+#     state: link
+#     force: yes
+#   tags: always
