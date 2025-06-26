@@ -2,9 +2,9 @@
   yum:
     name:
       - "@Development tools"
-      - cmake
       - python3-devel
       - python3-pip
+      - cmake
       - zsh
       - tmux
       - npm
