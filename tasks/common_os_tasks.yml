@@ -6,10 +6,8 @@
   tags: always
 - name: Install Oh-My-Zsh
   shell: |
-    curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh > ~/.oh-my-installer &&
-    chmod +x ~/.oh-my-installer &&
-    ~/.oh-my-installer
-  when: oh_my_stats.stat.exists == False
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  when: not oh_my_stats.stat.exists
   tags: always
 - name: Check if .zshrc.pre-oh-my-zsh exists
   stat:
