@@ -72,12 +72,22 @@
     force: yes
   tags: always
 
-- name: Link claude code
+# - name: Link claude code
+#   ansible.builtin.file:
+#     src: "{{ config_path }}/dotfiles/claude_code_settings.json"
+#     dest: "{{ lookup('env', 'HOME') }}/.claude/settings.json"
+#     state: link
+#     force: yes
+#   tags: always
+
+- name: Link claude code config files
   ansible.builtin.file:
-    src: "{{ config_path }}/dotfiles/claude_code_settings.json"
-    dest: "{{ lookup('env', 'HOME') }}/.claude/settings.json"
+    src: "{{ item }}"
+    dest: "{{ lookup('env', 'HOME') }}/.claude/{{ item | basename }}"
     state: link
     force: yes
+  with_fileglob:
+    - "{{ config_path }}/dotfiles/claude/*"
   tags: always
 
 - name: Link tridactyl  
