@@ -80,14 +80,20 @@
 #     force: yes
 #   tags: always
 
-- name: Link claude code config files
+- name: Find claude config items
+  ansible.builtin.find:
+    paths: "{{ config_path }}/dotfiles/claude"
+    file_type: any
+  register: claude_items
+  tags: always
+
+- name: Link claude code config items
   ansible.builtin.file:
-    src: "{{ item }}"
-    dest: "{{ lookup('env', 'HOME') }}/.claude/{{ item | basename }}"
+    src: "{{ item.path }}"
+    dest: "{{ lookup('env', 'HOME') }}/.claude/{{ item.path | basename }}"
     state: link
     force: yes
-  with_fileglob:
-    - "{{ config_path }}/dotfiles/claude/*"
+  loop: "{{ claude_items.files }}"
   tags: always
 
 - name: Link tridactyl  
