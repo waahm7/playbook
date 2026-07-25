@@ -2,12 +2,12 @@
   apt:
     name:
       - zsh
-      - tmux
       - cmake
+      - ninja-build
+      - ccache
       - npm
       - gcc
       - g++
-      - ripgrep
       - make
       - python3-pip
       - python3-venv

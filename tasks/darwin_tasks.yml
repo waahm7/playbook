@@ -15,51 +15,29 @@
   homebrew_cask:
     name: "{{ item }}"
   loop:
-    - iterm2
-    - todoist
     - alfred
-    - fantastical
-    - font-fira-code
-    - font-hack-nerd-font
-    - visual-studio-code
-    - vlc
-    - zwift
-    - selfcontrol
-    - lunar
+    - claude
+    - claude-code
     - firefox
+    - ghostty
+    - logi-options+
+    - nordvpn
+    - qbittorrent
+    - vlc
   tags: homebrew_cask
 
 - name: Install additional Homebrew packages
   homebrew:
     name: "{{ item }}"
   loop:
-    - openjdk@17
-    - zsh
-    - zsh-syntax-highlighting
-    - exa
-    - mas
-    - ripgrep
-    - neovim
-    - fd
-    - npm
-    - rust
-    - fzf
-    - llvm
-    - tmux
     - ansible
-    - pipx
-    # remove other languages
-    - mise
+    - ccache
+    - cmake
+    - fzf
+    - neovim
+    - ninja
+    - node
+    - powerlevel10k
+    - ripgrep
+    - tmux
   tags: homebrew
-
-- name: Install Mac App Store applications
-  shell: mas install "{{ item }}"
-  loop:
-    - 441258766  # Magnet
-    - 302584613  # Kindle
-    - 1402042596 # Adblock
-    - 425424353  # The Unarchiver
-  tags: mas
-
-- name: Run mise install
-  ansible.builtin.command: "/opt/homebrew/bin/mise install"

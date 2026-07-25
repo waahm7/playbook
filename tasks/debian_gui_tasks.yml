@@ -1,0 +1,264 @@
+---
+# Desktop GUI setup for Ubuntu / GNOME (Wayland).
+# Included from setup.yml only when the GUI environment variable is 1.
+#
+# The Adv360 keyboard emits LGUI-based chords, and LGUI = Cmd on macOS / Super on
+# Linux, so the SAME keyboard layers are used on both OSes:
+#   Cmd+C/V/...                    editing     -> Toshy translates to Ctrl on Linux
+#   Super+Ctrl+Shift + W/R/T/G/E   app focus   -> Firefox/Slack/VS Code/Claude/Ghostty
+#   Super+Space                    launcher    -> Ulauncher
+#   Super+Shift+C                  clipboard   -> CopyQ
+# The Super-based shortcuts match the keyboard output directly (no remap needed);
+# Toshy only handles the Cmd editing/navigation layer, app-aware so terminals keep Ctrl.
+
+- name: Add Ulauncher PPA
+  become: true
+  ansible.builtin.apt_repository:
+    repo: ppa:agornostal/ulauncher
+    state: present
+  tags: gui
+
+- name: Install desktop GUI packages
+  become: true
+  ansible.builtin.apt:
+    name:
+      - ulauncher
+      - copyq
+      - gnome-shell-extension-manager
+    state: present
+    update_cache: true
+  tags: gui
+
+# GUI apps mirroring the macOS Homebrew casks. Ghostty is in the official Ubuntu
+# repos on 26.04+. Alfred is replaced by Ulauncher; Claude Desktop and NordVPN
+# are installed from their own apt repos below. Logi Options+ has no Linux build;
+# the MX Ergo S pointer speed and natural scroll are handled via GNOME dconf
+# below (Solaar omitted for now -- add it if you need hardware button remaps).
+- name: Install GUI applications
+  become: true
+  ansible.builtin.apt:
+    name:
+      - vlc
+      - firefox
+      - ghostty
+      - qbittorrent
+    state: present
+  tags: gui
+
+# Claude Desktop for Linux (beta) from Anthropic's apt repo, so updates arrive
+# with normal apt upgrades. Requires Ubuntu 22.04+/Debian 12+, amd64/arm64.
+- name: Add Claude Desktop signing key
+  become: true
+  ansible.builtin.get_url:
+    url: https://downloads.claude.ai/claude-desktop/key.asc
+    dest: /usr/share/keyrings/claude-desktop-archive-keyring.asc
+    mode: "0644"
+  tags: gui
+
+- name: Add Claude Desktop apt repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64,arm64 signed-by=/usr/share/keyrings/claude-desktop-archive-keyring.asc] https://downloads.claude.ai/claude-desktop/apt/stable stable main"
+    filename: claude-desktop
+    state: present
+  tags: gui
+
+- name: Install Claude Desktop
+  become: true
+  ansible.builtin.apt:
+    name: claude-desktop
+    state: present
+    update_cache: true
+  tags: gui
+
+# NordVPN official Linux client from NordVPN's apt repo (updates via apt upgrade).
+- name: Add NordVPN signing key
+  become: true
+  ansible.builtin.get_url:
+    url: https://repo.nordvpn.com/gpg/nordvpn_public.asc
+    dest: /usr/share/keyrings/nordvpn-archive-keyring.asc
+    mode: "0644"
+  tags: gui
+
+- name: Add NordVPN apt repository
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/nordvpn-archive-keyring.asc] https://repo.nordvpn.com/deb/nordvpn/debian stable main"
+    filename: nordvpn
+    state: present
+  tags: gui
+
+- name: Install NordVPN
+  become: true
+  ansible.builtin.apt:
+    name: nordvpn
+    state: present
+    update_cache: true
+  tags: gui
+
+# Lets you run nordvpn without sudo (takes effect after a re-login).
+- name: Add user to the nordvpn group
+  become: true
+  ansible.builtin.user:
+    name: "{{ ansible_env.USER }}"
+    groups: nordvpn
+    append: true
+  tags: gui
+
+# --- Toshy: macOS-style keyboard layer (app-aware, works on Wayland) --------
+# Translates the Cmd (Super) editing/navigation chords into their Linux
+# equivalents per-application, so Cmd+C copies in GUI apps while terminals keep
+# Ctrl. Toshy's installer sets up its own systemd --user services.
+# NOTE: GNOME Wayland also needs ONE Toshy-compatible shell extension for
+# focused-window detection (Xremap, Window Calls Extended, or Focused Window
+# D-Bus); install it via the Extension Manager (installed above).
+#
+# Run the playbook with -K (--ask-become-pass) as usual for the become tasks.
+# Toshy's installer additionally calls sudo itself for native packages, which -K
+# does not cover, so type your password once more when it prompts. For a fully
+# unattended run, add --skip-native below and install Toshy's apt deps via an
+# Ansible apt task instead.
+
+# Tracks the latest Toshy main on every run; reports "changed" on the initial
+# clone and whenever it pulls new commits. Pin `version:` to a tag to freeze it.
+- name: Clone or update Toshy
+  ansible.builtin.git:
+    repo: https://github.com/RedBearAK/toshy.git
+    dest: "{{ ansible_env.HOME }}/.local/share/toshy-src"
+  register: toshy_repo
+  tags: gui
+
+- name: Check if Toshy is already installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/toshy"
+  register: toshy_installed
+  tags: gui
+
+# Runs on first install and again whenever the pull brought new commits, so
+# re-running the playbook keeps Toshy up to date. The installer backs up the
+# existing config (timestamped) before applying, so customizations are preserved.
+- name: Install or update Toshy
+  ansible.builtin.command:
+    cmd: ./setup_toshy.py install --skip-update-check
+    chdir: "{{ ansible_env.HOME }}/.local/share/toshy-src"
+  when: toshy_repo.changed or not toshy_installed.stat.exists
+  tags: gui
+
+# --- Run or Raise: focus-or-launch app shortcuts (works on Wayland) ---------
+
+- name: Install Run or Raise GNOME extension
+  ansible.builtin.git:
+    repo: https://github.com/CZ-NIC/run-or-raise.git
+    dest: "{{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/run-or-raise@edvard.cz"
+  tags: gui
+
+- name: Enable Run or Raise extension
+  ansible.builtin.command: gnome-extensions enable run-or-raise@edvard.cz
+  register: ror_enable
+  changed_when: false
+  failed_when: false
+  tags: gui
+
+- name: Configure Run or Raise app shortcuts
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/run-or-raise/shortcuts.conf"
+    mode: "0644"
+    # Format: shortcut,launch command,wm_class,title
+    content: |
+      <Super><Control><Shift>w,firefox,firefox,
+      <Super><Control><Shift>r,slack,Slack,
+      <Super><Control><Shift>t,code,Code,
+      <Super><Control><Shift>g,claude-desktop,claude-desktop,
+      <Super><Control><Shift>e,ghostty,com.mitchellh.ghostty,
+  tags: gui
+
+# --- Autostart launcher + clipboard manager --------------------------------
+
+- name: Autostart Ulauncher
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/autostart/ulauncher.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Name=Ulauncher
+      Exec=ulauncher --hide-window --no-window-shadow
+      X-GNOME-Autostart-enabled=true
+  tags: gui
+
+- name: Autostart CopyQ
+  ansible.builtin.copy:
+    dest: "{{ ansible_env.HOME }}/.config/autostart/copyq.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Name=CopyQ
+      Exec=copyq
+      X-GNOME-Autostart-enabled=true
+  tags: gui
+
+# --- GNOME custom keybindings for launcher + clipboard ---------------------
+# These actions do not need window focus, so plain dconf shortcuts work on Wayland.
+
+# Free Super+Space (GNOME's default switch-input-source) for Ulauncher, which the
+# keyboard's Cmd+Space maps to.
+- name: Clear Super+Space switch-input-source binding
+  community.general.dconf:
+    key: /org/gnome/desktop/wm/keybindings/switch-input-source
+    value: "@as []"
+    state: present
+  tags: gui
+
+- name: Register custom keybinding paths
+  community.general.dconf:
+    key: /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings
+    value: "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ulauncher/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/copyq/']"
+    state: present
+  tags: gui
+
+# Bound to Super+Space, which the keyboard emits for Cmd+Space.
+- name: Configure Ulauncher toggle keybinding (Cmd+Space)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ulauncher/{{ item.k }}"
+    value: "{{ item.v }}"
+    state: present
+  loop:
+    - { k: name, v: "'Ulauncher'" }
+    - { k: command, v: "'ulauncher-toggle'" }
+    - { k: binding, v: "'<Super>space'" }
+  tags: gui
+
+# Bound to Super+Shift+C, which the keyboard emits for Cmd+Shift+C (matches Alfred).
+- name: Configure CopyQ clipboard-history keybinding (Super+Shift+C)
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/copyq/{{ item.k }}"
+    value: "{{ item.v }}"
+    state: present
+  loop:
+    - { k: name, v: "'CopyQ'" }
+    - { k: command, v: "'copyq toggle'" }
+    - { k: binding, v: "'<Super><Shift>c'" }
+  tags: gui
+
+# --- MX Ergo S trackball, mirroring Logi Options+ --------------------------
+# Natural scroll is an exact match. Pointer speed: both sliders share a midpoint
+# default (Options+ 50% <-> GNOME 0.0), so gnome_speed = (percent - 50) / 50.
+# Options+ 65% -> (65-50)/50 = 0.3. NOTE this matches slider POSITION, not actual
+# speed -- Options+ drives hardware DPI while GNOME is a software accel factor, so
+# tune to taste. For a faithful hardware match you could install Solaar and set
+# its "Pointer Speed" (same setting Options+ changes), then set this back to 0.
+# There is no Wayland equivalent for the Options+ scroll-SPEED slider.
+- name: Configure trackball natural scroll (matches Options+)
+  community.general.dconf:
+    key: /org/gnome/desktop/peripherals/mouse/natural-scroll
+    value: "true"
+    state: present
+  tags: gui
+
+- name: Configure trackball pointer speed (~65%)
+  community.general.dconf:
+    key: /org/gnome/desktop/peripherals/mouse/speed
+    value: "0.3"
+    state: present
+  tags: gui

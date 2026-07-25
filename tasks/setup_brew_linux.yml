@@ -1,0 +1,42 @@
+# Homebrew on Linux (x86_64), so CLI tools stay in sync with macOS and upgrade
+# with a single `brew upgrade`. Casks are macOS-only, so GUI apps stay on apt.
+- name: Install Homebrew build dependencies (Debian)
+  become: true
+  ansible.builtin.apt:
+    name:
+      - build-essential
+      - procps
+      - curl
+      - file
+      - git
+    state: present
+  when: ansible_os_family == 'Debian'
+  tags: always
+
+- name: Check if Homebrew is installed
+  ansible.builtin.stat:
+    path: /home/linuxbrew/.linuxbrew/bin/brew
+  register: brew_bin
+  tags: always
+
+# NONINTERACTIVE skips prompts; the installer still calls sudo for the initial
+# /home/linuxbrew setup, so run the playbook with -K (or have passwordless sudo).
+- name: Install Homebrew
+  ansible.builtin.shell:
+    cmd: >
+      NONINTERACTIVE=1 /bin/bash -c
+      "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  when: not brew_bin.stat.exists
+  tags: always
+
+# Mirrors the macOS `brew leaves` CLI tools. `brew upgrade` keeps them current.
+- name: Install Homebrew packages
+  community.general.homebrew:
+    name:
+      - neovim
+      - fzf
+      - ripgrep
+      - tmux
+    state: present
+    path: /home/linuxbrew/.linuxbrew/bin
+  tags: always

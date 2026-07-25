@@ -6,7 +6,6 @@
       - python3-pip
       - cmake
       - zsh
-      - tmux
       - npm
       - gcc
       - g++
@@ -14,6 +13,7 @@
       - util-linux-user #chsh requires it
       - maven
       - ninja-build
+      - ccache
     state: present
   become: yes
   tags: always
@@ -28,7 +28,4 @@
     name: "{{ ansible_env.USER }}"
     shell: /bin/zsh
   become: yes
-  tags: always
-- name: Setup Ripgrep from Source
-  ansible.builtin.include_tasks: "setup_ripgrep_from_source.yml"
   tags: always

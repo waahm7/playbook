@@ -6,7 +6,6 @@
     config_path: "{{ lookup('env', 'HOME') }}/configurations"
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
-    nvim_archive: "{{ 'nvim-linux-arm64.tar.gz' if ansible_architecture == 'aarch64' else 'nvim-linux-x86_64.tar.gz' }}"
   tasks:
     - name: Set timezone
       become: true
@@ -18,11 +17,10 @@
         - dotfiles
         - ssh
         - git
-    # Currently, using mise. Remove it after a while if that works good.
-    # - name: setup rust 
+    # - name: setup rust
     #   ansible.builtin.include_tasks: "tasks/setup_rust.yml"
     #   tags:
-    #     - rust 
+    #     - rust
     - name: Install git repositories
       ansible.builtin.include_tasks: "tasks/setup_git_and_repos.yml" 
       tags: 
@@ -45,18 +43,24 @@
       ansible.builtin.include_tasks: "tasks/common_os_tasks.yml"
       tags: 
         - os
-    # Installs fzf which requires ZSH
-    - name: Include Linux Tasks 
+    # Installs Homebrew + CLI tools (nvim, fzf, ripgrep, tmux) on Linux
+    - name: Include Linux Tasks
       ansible.builtin.include_tasks: "tasks/linux_tasks.yml"
       when: >
         ansible_facts['os_family'] in ['Debian', 'RedHat', 'Archlinux', 'Alpine']
       tags: 
         - os
-    - name: Setup Amazon Work 
-      ansible.builtin.include_tasks: "tasks/amazon.yml"
-      tags: 
-        - amazon 
-#    - name: Enable fzf-tab 
+    - name: Setup Desktop GUI (Ulauncher, CopyQ, app hotkeys)
+      ansible.builtin.include_tasks: "tasks/debian_gui_tasks.yml"
+      when: >
+        ansible_facts['os_family'] == 'Debian'
+        and (
+          (lookup('env', 'GUI') | default('', true) | lower in ['1', 'true', 'yes'])
+          or (lookup('env', 'gui') | default('', true) | lower in ['1', 'true', 'yes'])
+        )
+      tags:
+        - gui
+#    - name: Enable fzf-tab
 #      shell: |
 #        source ~/.zshrc && enable-fzf-tab
 #      args:
