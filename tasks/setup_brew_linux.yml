@@ -19,8 +19,25 @@
   register: brew_bin
   tags: always
 
-# NONINTERACTIVE skips prompts; the installer still calls sudo for the initial
-# /home/linuxbrew setup, so run the playbook with -K (or have passwordless sudo).
+# Under NONINTERACTIVE the installer probes sudo with "sudo -n", which cannot
+# prompt and so always fails from Ansible. Passing -K does not help: that
+# password goes to Ansible's own become, never to the installer's inner sudo.
+# The installer skips sudo entirely when the prefix is already writable, so
+# create it here and hand ownership to the user first.
+- name: Create Homebrew prefix owned by the user
+  become: true
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: '0755'
+  loop:
+    - /home/linuxbrew
+    - /home/linuxbrew/.linuxbrew
+  when: not brew_bin.stat.exists
+  tags: always
+
 - name: Install Homebrew
   ansible.builtin.shell:
     cmd: >

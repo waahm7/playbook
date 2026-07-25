@@ -7,6 +7,21 @@
     src_key: "./ssh/id_ed25519_vault"
     dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
   tasks:
+    # Ubuntu ships sudo-rs as the default sudo. It rewrites the custom prompt
+    # Ansible passes via -p into "[sudo: <prompt>] Password:", so Ansible never
+    # matches the prompt it is waiting for and every become task dies with
+    # "Timed out waiting for become success or become password prompt".
+    # Classic sudo stays installed as /usr/bin/sudo.ws, so use it when present.
+    - name: Check for classic sudo
+      ansible.builtin.stat:
+        path: /usr/bin/sudo.ws
+      register: classic_sudo
+      tags: always
+    - name: Use classic sudo for privilege escalation
+      ansible.builtin.set_fact:
+        ansible_become_exe: /usr/bin/sudo.ws
+      when: classic_sudo.stat.exists
+      tags: always
     - name: install ssh
       ansible.builtin.include_tasks: "tasks/ssh.yml"
       tags:

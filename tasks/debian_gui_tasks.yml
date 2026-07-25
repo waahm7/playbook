@@ -8,13 +8,41 @@
 #   Super+Ctrl+Shift + W/R/T/G/E   app focus   -> Firefox/Slack/VS Code/Claude/Ghostty
 #   Super+Space                    launcher    -> Ulauncher
 #   Super+Shift+C                  clipboard   -> CopyQ
-# The Super-based shortcuts match the keyboard output directly (no remap needed);
-# Toshy only handles the Cmd editing/navigation layer, app-aware so terminals keep Ctrl.
+# The dconf bindings below are all Super based, but the Super chords do NOT
+# reach GNOME untouched while Toshy runs. Toshy classifies the Adv360 as an
+# Apple keyboard (set per device in its own config), which swaps LGUI to Ctrl
+# and physical Ctrl to Super. The app focus chords survive that swap because
+# they hold both keys, so the modifier set is unchanged. Single modifier LGUI
+# chords do not survive, so Super+Space and Super+Shift+C need explicit
+# passthrough entries in Toshy's "user_apps" slice. Toshy is installed by hand;
+# see the note further down.
+
+# apt_repository cannot add a ppa: source on releases that dropped apt-key. Its
+# fallback runs "gpg --keyserver ... --export", but export only dumps keys that
+# are already in the local keyring and never fetches from the keyserver, so it
+# always fails with "Unable to get required signing key". Fetch the key and
+# declare the source explicitly instead.
+- name: Fetch Ulauncher PPA signing key
+  become: true
+  ansible.builtin.get_url:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x{{ ulauncher_ppa_key }}"
+    dest: /etc/apt/keyrings/ulauncher.asc
+    owner: root
+    group: root
+    mode: '0644'
+  vars:
+    ulauncher_ppa_key: 59EBDE772980C381CA13FA59FAF1020699503176
+  tags: gui
 
 - name: Add Ulauncher PPA
   become: true
-  ansible.builtin.apt_repository:
-    repo: ppa:agornostal/ulauncher
+  ansible.builtin.deb822_repository:
+    name: ulauncher
+    types: deb
+    uris: https://ppa.launchpadcontent.net/agornostal/ulauncher/ubuntu
+    suites: "{{ ansible_distribution_release }}"
+    components: main
+    signed_by: /etc/apt/keyrings/ulauncher.asc
     state: present
   tags: gui
 
@@ -105,44 +133,15 @@
     append: true
   tags: gui
 
-# --- Toshy: macOS-style keyboard layer (app-aware, works on Wayland) --------
-# Translates the Cmd (Super) editing/navigation chords into their Linux
-# equivalents per-application, so Cmd+C copies in GUI apps while terminals keep
-# Ctrl. Toshy's installer sets up its own systemd --user services.
-# NOTE: GNOME Wayland also needs ONE Toshy-compatible shell extension for
-# focused-window detection (Xremap, Window Calls Extended, or Focused Window
-# D-Bus); install it via the Extension Manager (installed above).
-#
-# Run the playbook with -K (--ask-become-pass) as usual for the become tasks.
-# Toshy's installer additionally calls sudo itself for native packages, which -K
-# does not cover, so type your password once more when it prompts. For a fully
-# unattended run, add --skip-native below and install Toshy's apt deps via an
-# Ansible apt task instead.
-
-# Tracks the latest Toshy main on every run; reports "changed" on the initial
-# clone and whenever it pulls new commits. Pin `version:` to a tag to freeze it.
-- name: Clone or update Toshy
-  ansible.builtin.git:
-    repo: https://github.com/RedBearAK/toshy.git
-    dest: "{{ ansible_env.HOME }}/.local/share/toshy-src"
-  register: toshy_repo
-  tags: gui
-
-- name: Check if Toshy is already installed
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.config/toshy"
-  register: toshy_installed
-  tags: gui
-
-# Runs on first install and again whenever the pull brought new commits, so
-# re-running the playbook keeps Toshy up to date. The installer backs up the
-# existing config (timestamped) before applying, so customizations are preserved.
-- name: Install or update Toshy
-  ansible.builtin.command:
-    cmd: ./setup_toshy.py install --skip-update-check
-    chdir: "{{ ansible_env.HOME }}/.local/share/toshy-src"
-  when: toshy_repo.changed or not toshy_installed.stat.exists
-  tags: gui
+# Toshy (the macOS style Cmd editing layer) is installed by hand, not here. Its
+# setup_toshy.py always prompts for admin confirmation, deliberately clears the
+# sudo ticket, and on GNOME Wayland demands a randomly generated secret code, so
+# it cannot run unattended. Install it in a terminal:
+#   git clone https://github.com/RedBearAK/toshy.git ~/.local/share/toshy-src
+#   cd ~/.local/share/toshy-src && ./setup_toshy.py install
+# On GNOME Wayland it also needs ONE compatible shell extension for focused
+# window detection (Xremap, Window Calls Extended, or Focused Window D-Bus),
+# installable via the Extension Manager set up above.
 
 # --- Run or Raise: focus-or-launch app shortcuts (works on Wayland) ---------
 
@@ -152,11 +151,37 @@
     dest: "{{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/run-or-raise@edvard.cz"
   tags: gui
 
+# GNOME Shell only discovers a newly cloned extension in a fresh session, so on
+# the run that first clones it this cannot succeed. Tolerating that is correct,
+# but it must not pass silently: an extension that is present yet disabled looks
+# exactly like a working setup until every shortcut turns out to be dead.
 - name: Enable Run or Raise extension
   ansible.builtin.command: gnome-extensions enable run-or-raise@edvard.cz
   register: ror_enable
   changed_when: false
   failed_when: false
+  tags: gui
+
+- name: Report that Run or Raise still needs enabling
+  ansible.builtin.debug:
+    msg: >
+      Run or Raise could not be enabled yet (this is expected on a first
+      install). Log out and back in, then re-run the playbook or run
+      "gnome-extensions enable run-or-raise@edvard.cz" by hand. The app focus
+      shortcuts stay dead until it reports State: ACTIVE.
+  when: ror_enable.rc != 0
+  tags: gui
+
+# ansible.builtin.copy will not create missing parent directories, and a fresh
+# GNOME account has neither of these until something writes to them.
+- name: Ensure GUI config directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0755'
+  loop:
+    - "{{ ansible_env.HOME }}/.config/run-or-raise"
+    - "{{ ansible_env.HOME }}/.config/autostart"
   tags: gui
 
 - name: Configure Run or Raise app shortcuts
@@ -168,7 +193,7 @@
       <Super><Control><Shift>w,firefox,firefox,
       <Super><Control><Shift>r,slack,Slack,
       <Super><Control><Shift>t,code,Code,
-      <Super><Control><Shift>g,claude-desktop,claude-desktop,
+      <Super><Control><Shift>g,claude-desktop,Claude,
       <Super><Control><Shift>e,ghostty,com.mitchellh.ghostty,
   tags: gui
 
