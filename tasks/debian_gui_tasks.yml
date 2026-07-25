@@ -142,6 +142,59 @@
 # On GNOME Wayland it also needs ONE compatible shell extension for focused
 # window detection (Xremap, Window Calls Extended, or Focused Window D-Bus),
 # installable via the Extension Manager set up above.
+#
+# The installer preserves whatever sits between its SLICE_MARK comments across
+# reinstalls, but a first install on a new machine writes the stock defaults.
+# These two slices carry fixes that are not optional here, so restore them from
+# the dotfiles: kbtype_override classifies the Adv360 as an Apple keyboard
+# (auto detection calls it Windows, which maps LGUI to Opt and leaves Cmd+C
+# dead), and user_apps re-emits a real Super for the launcher and clipboard
+# chords. Skipped entirely when Toshy is not installed.
+
+- name: Check for Toshy config
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.config/toshy/toshy_config.py"
+  register: toshy_config
+  tags: gui
+
+# If a future Toshy renames its slices, blockinfile would append the block at
+# the end of the file instead of replacing it, which would load too late to
+# matter. Confirm the markers exist rather than writing into the dark.
+- name: Check Toshy slice markers are present
+  ansible.builtin.shell:
+    cmd: >
+      grep -q 'SLICE_MARK_START: kbtype_override' {{ toshy_cfg }} &&
+      grep -q 'SLICE_MARK_START: user_apps' {{ toshy_cfg }}
+  vars:
+    toshy_cfg: "{{ ansible_env.HOME }}/.config/toshy/toshy_config.py"
+  register: toshy_markers
+  changed_when: false
+  failed_when: false
+  when: toshy_config.stat.exists
+  tags: gui
+
+- name: Restore Toshy config slices
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.config/toshy/toshy_config.py"
+    marker: "###  SLICE_MARK_{mark}: {{ item }}  ###  EDITS OUTSIDE THESE MARKS WILL BE LOST ON UPGRADE"
+    marker_begin: START
+    marker_end: END
+    block: "{{ lookup('file', config_path + '/dotfiles/toshy/' + item + '.py') }}"
+    validate: python3 -m py_compile %s
+  loop:
+    - kbtype_override
+    - user_apps
+  register: toshy_slices
+  when:
+    - toshy_config.stat.exists
+    - toshy_markers.rc | default(1) == 0
+  tags: gui
+
+- name: Restart Toshy services
+  ansible.builtin.command: "{{ ansible_env.HOME }}/.local/bin/toshy-services-restart"
+  when: toshy_slices.changed | default(false)
+  changed_when: true
+  tags: gui
 
 # --- Run or Raise: focus-or-launch app shortcuts (works on Wayland) ---------
 
